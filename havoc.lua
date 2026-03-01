@@ -1,268 +1,233 @@
--- HAVOC HUB | BK's Hub v5 STYLE | FULL LOGIC | XENO SAFE
+repeat task.wait() until game:IsLoaded()
 
-if not Drawing then return warn("Drawing API not supported") end
-
--- ================= SERVICES =================
 local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
 local UIS = game:GetService("UserInputService")
-local RS = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+local Lighting = game:GetService("Lighting")
+local Stats = game:GetService("Stats")
+local player = Players.LocalPlayer
+local PlayerGui = player:WaitForChild("PlayerGui")
 
-local LP = Players.LocalPlayer
-local Char, Humanoid, HRP
+pcall(function() PlayerGui:FindFirstChild("HAVOC_FINAL_BOSS_CINEMATIC"):Destroy() end)
 
-local function refreshChar()
-    Char = LP.Character or LP.CharacterAdded:Wait()
-    Humanoid = Char:WaitForChild("Humanoid")
-    HRP = Char:WaitForChild("HumanoidRootPart")
-end
-refreshChar()
-LP.CharacterAdded:Connect(refreshChar)
+-- Main GUI
+local gui = Instance.new("ScreenGui")
+gui.Name = "HAVOC_FINAL_BOSS_CINEMATIC"
+gui.ResetOnSpawn = false
+gui.Parent = PlayerGui
 
--- ================= TOGGLES =================
-local Toggles = {
-    AutoDesync = false,
-    AutoTeleport = false,
-    BodySwap = false,
-    ReturnAfterTP = false,
-    AutoClone = false,
-    AutoDestroyTurret = false,
-    GrappleSpeed = false,
-    InfiniteJump = false
-}
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0,250,0,350)
+frame.Position = UDim2.new(0.35,0,0.3,0)
+frame.BackgroundColor3 = Color3.fromRGB(15,10,25)
+frame.BorderSizePixel = 0
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0,16)
 
--- ================= UI STATE =================
-local visible = true
-local dragging = false
-local dragOffset = Vector2.new()
-local pos = Vector2.new(260,160)
-local size = Vector2.new(520,360)
+-- Neon border
+local stroke = Instance.new("UIStroke", frame)
+stroke.Thickness = 3
 
-local theme = {
-    bg = Color3.fromRGB(20,20,25),
-    panel = Color3.fromRGB(28,28,35),
-    header = Color3.fromRGB(32,32,42),
-    accent = Color3.fromRGB(170,90,255),
-    text = Color3.fromRGB(230,230,230)
-}
+-- Animated galaxy background
+local bg = Instance.new("Frame", frame)
+bg.Size = UDim2.new(1,0,1,0)
+bg.BackgroundColor3 = Color3.fromRGB(5,5,15)
+bg.BorderSizePixel = 0
+Instance.new("UICorner", bg).CornerRadius = UDim.new(0,16)
 
-local tabs = {"Brainrots","Features","Misc","Settings","Credits"}
-local currentTab = "Brainrots"
-local objects, togglesUI = {}, {}
-
--- ================= DRAW HELPERS =================
-local function newSquare()
-    local s = Drawing.new("Square")
-    s.Filled = true
-    s.Visible = true
-    table.insert(objects,s)
-    return s
+local particles = {}
+for i=1,60 do
+	local p = Instance.new("Frame")
+	p.Size = UDim2.new(0,2,0,2)
+	p.Position = UDim2.new(math.random(),0,math.random(),0)
+	p.BackgroundColor3 = Color3.fromRGB(255,255,255)
+	p.BackgroundTransparency = math.random()*0.8
+	p.BorderSizePixel = 0
+	p.Parent = bg
+	table.insert(particles,p)
 end
 
-local function newText()
-    local t = Drawing.new("Text")
-    t.Font = 2
-    t.Size = 16
-    t.Visible = true
-    table.insert(objects,t)
-    return t
-end
+-- Title
+local title = Instance.new("TextLabel", frame)
+title.Size = UDim2.new(1,0,0,45)
+title.Position = UDim2.new(0,0,0,0)
+title.BackgroundTransparency = 1
+title.Font = Enum.Font.GothamBlack
+title.TextScaled = true
+title.Text = "HAVOC HUB DUEL HELPER"
+title.TextColor3 = Color3.new(1,1,1)
 
--- ================= MAIN UI =================
-local bg = newSquare()
-bg.Size = size
-bg.Color = theme.bg
-
-local header = newSquare()
-header.Size = Vector2.new(size.X,44)
-header.Color = theme.header
-
-local sidebar = newSquare()
-sidebar.Size = Vector2.new(70,size.Y-44)
-sidebar.Color = theme.panel
-
-local title = newText()
-title.Text = "HAVOC HUB"
-title.Size = 18
-title.Color = theme.accent
-
-local tabButtons = {}
-for i,name in ipairs(tabs) do
-    local t = newText()
-    t.Text = name:sub(1,1)
-    tabButtons[name] = t
-end
-
--- ================= TOGGLE CREATOR =================
-local function createToggle(label,index,flag)
-    local text = newText()
-    text.Text = label
-    text.Color = theme.text
-
-    local track = newSquare()
-    track.Size = Vector2.new(44,18)
-    track.Color = Color3.fromRGB(45,45,55)
-
-    local knob = newSquare()
-    knob.Size = Vector2.new(16,16)
-    knob.Color = theme.accent
-
-    togglesUI[#togglesUI+1] = {
-        label=text, track=track, knob=knob,
-        index=index, flag=flag
-    }
-end
-
-createToggle("Auto-Desync V3",1,"AutoDesync")
-createToggle("Auto Teleport",2,"AutoTeleport")
-createToggle("Body Swap",3,"BodySwap")
-createToggle("Return After TP",4,"ReturnAfterTP")
-createToggle("Auto Clone",5,"AutoClone")
-createToggle("Destroy Turrets",7,"AutoDestroyTurret")
-createToggle("Grapple Speed",8,"GrappleSpeed")
-createToggle("Infinite Jump",9,"InfiniteJump")
-
--- ================= FEATURE LOGIC =================
-
--- Auto Desync
-RS.Heartbeat:Connect(function()
-    if Toggles.AutoDesync and HRP then
-        HRP.Velocity = Vector3.new(math.random(-45,45),0,math.random(-45,45))
-    end
+-- FPS/Ping
+local counter = Instance.new("TextLabel", gui)
+counter.Size = UDim2.new(0,180,0,25)
+counter.Position = UDim2.new(0,10,0,10)
+counter.BackgroundTransparency = 1
+counter.Font = Enum.Font.GothamBold
+counter.TextScaled = true
+counter.TextColor3 = Color3.new(1,1,1)
+RunService.RenderStepped:Connect(function(dt)
+	local fps = math.floor(1/dt)
+	local ping = 0
+	pcall(function() ping = math.floor(Stats.Network.ServerStatsItem["Data Ping"]:GetValue()) end)
+	counter.Text = "FPS "..fps.." | "..ping.." ms"
 end)
 
--- Auto Teleport (brainrot)
-local function tpBrainrot()
-    for _,v in pairs(workspace:GetDescendants()) do
-        if v:IsA("BasePart") and v.Name:lower():find("brainrot") then
-            HRP.CFrame = v.CFrame + Vector3.new(0,3,0)
-            return
-        end
-    end
+-- Buttons
+local contentFrame = Instance.new("Frame", frame)
+contentFrame.Size = UDim2.new(1,-20,1,-90)
+contentFrame.Position = UDim2.new(0,10,0,90)
+contentFrame.BackgroundTransparency = 1
+local function createButton(name,posY)
+	local b = Instance.new("TextButton", contentFrame)
+	b.Size = UDim2.new(0.9,0,0,35)
+	b.Position = UDim2.new(0.05,0,0,posY)
+	b.Text = name
+	b.Font = Enum.Font.GothamBold
+	b.TextScaled = true
+	b.TextColor3 = Color3.new(1,1,1)
+	b.BackgroundColor3 = Color3.fromRGB(150,40,220)
+	Instance.new("UICorner", b)
+	return b
+end
+local galaxyBtn = createButton("Galaxy: OFF",0)
+local starBtn = createButton("Stars: OFF",50)
+local fovBtn = createButton("FOV: OFF",100)
+
+-- Draggable
+do
+	local dragging=false
+	local dragStart
+	local startPos
+	local dragInput
+	frame.InputBegan:Connect(function(input)
+		if input.UserInputType==Enum.UserInputType.MouseButton1 then
+			dragging=true
+			dragStart=input.Position
+			startPos=frame.Position
+			input.Changed:Connect(function()
+				if input.UserInputState==Enum.UserInputState.End then dragging=false end
+			end)
+		end
+	end)
+	frame.InputChanged:Connect(function(input)
+		if input.UserInputType==Enum.UserInputType.MouseMovement then dragInput=input end
+	end)
+	UIS.InputChanged:Connect(function(input)
+		if dragging and input==dragInput then
+			local delta=input.Position-dragStart
+			frame.Position=UDim2.new(startPos.X.Scale,startPos.X.Offset+delta.X,startPos.Y.Scale,startPos.Y.Offset+delta.Y)
+		end
+	end)
 end
 
+-- K toggle
+UIS.InputBegan:Connect(function(key,gp)
+	if gp then return end
+	if key.KeyCode==Enum.KeyCode.K then
+		frame.Visible=not frame.Visible
+	end
+end)
+
+-- Rainbow title + neon border
 task.spawn(function()
-    while task.wait(2) do
-        if Toggles.AutoTeleport then
-            tpBrainrot()
-        end
-    end
+	local hue=0
+	while frame.Parent do
+		hue+=0.005
+		title.TextColor3=Color3.fromHSV(hue%1,1,1)
+		stroke.Color=Color3.fromHSV(hue%1,0.8,1)
+		RunService.RenderStepped:Wait()
+	end
 end)
 
--- Body Swap
-task.spawn(function()
-    while task.wait(0.5) do
-        if Humanoid then
-            Humanoid.CameraOffset = Toggles.BodySwap and Vector3.new(2,0,0) or Vector3.zero
-        end
-    end
+-- Galaxy toggle
+local galaxy=false
+galaxyBtn.MouseButton1Click:Connect(function()
+	galaxy=not galaxy
+	if galaxy then
+		Lighting.Ambient=Color3.fromRGB(90,0,180)
+		Lighting.OutdoorAmbient=Color3.fromRGB(120,0,255)
+	else
+		Lighting.Ambient=Color3.new(.5,.5,.5)
+	end
+	galaxyBtn.Text="Galaxy: "..(galaxy and "ON" or "OFF")
 end)
 
--- Return After TP
-local lastPos
-RS.Heartbeat:Connect(function()
-    if HRP then lastPos = HRP.CFrame end
+-- Shooting stars with glow trails
+local stars=false
+local function star()
+	local char=player.Character
+	if not char then return end
+	local root=char:FindFirstChild("HumanoidRootPart")
+	if not root then return end
+	local p=Instance.new("Part")
+	p.Anchored=true
+	p.CanCollide=false
+	p.Material=Enum.Material.Neon
+	p.Color=Color3.new(1,1,1)
+	p.Size=Vector3.new(.5,.5,6)
+	p.Parent=workspace
+	p.Position=root.Position+Vector3.new(math.random(-200,200),200,math.random(-200,200))
+	-- Trail
+	local t=Instance.new("Trail",p)
+	t.Lifetime=0.4
+	t.Attachment0=Instance.new("Attachment",p)
+	t.Attachment1=Instance.new("Attachment",p)
+	t.Color=ColorSequence.new(Color3.fromRGB(255,255,255))
+	t.Transparency=NumberSequence.new(0.5,1)
+	local life=0
+	local con
+	con=RunService.RenderStepped:Connect(function(dt)
+		life+=dt
+		p.Position+=Vector3.new(-70,-9,-70)*dt
+		if life>2 then con:Disconnect(); p:Destroy() end
+	end)
+end
+starBtn.MouseButton1Click:Connect(function()
+	stars=not stars
+	starBtn.Text="Stars: "..(stars and "ON" or "OFF")
+	if stars then task.spawn(function() while stars do star() task.wait(3) end end) end
 end)
 
-task.spawn(function()
-    while task.wait(3) do
-        if Toggles.ReturnAfterTP and lastPos then
-            HRP.CFrame = lastPos
-        end
-    end
+-- FOV toggle
+local camera=workspace.CurrentCamera
+local fov=false
+fovBtn.MouseButton1Click:Connect(function()
+	fov=not fov
+	camera.FieldOfView=fov and 110 or 70
+	fovBtn.Text="FOV: "..(fov and "ON" or "OFF")
 end)
 
--- Auto Clone
-task.spawn(function()
-    while task.wait(4) do
-        if Toggles.AutoClone and Char then
-            local c = Char:Clone()
-            c.Parent = workspace
-            c:SetPrimaryPartCFrame(HRP.CFrame * CFrame.new(3,0,0))
-            task.delay(2,function() c:Destroy() end)
-        end
-    end
+-- Snowflakes with glow trails
+local snowflakes={}
+for i=1,25 do
+	local flake=Instance.new("Frame")
+	flake.Size=UDim2.new(0,math.random(2,4),0,math.random(2,4))
+	flake.BackgroundColor3=Color3.fromRGB(255,255,255)
+	flake.BackgroundTransparency=math.random()*0.7
+	Instance.new("UICorner",flake)
+	flake.Position=UDim2.new(math.random(),0,0,0)
+	flake.Parent=frame
+	-- Glow trail
+	local t=Instance.new("UIStroke",flake)
+	t.Transparency=0.7
+	t.Color=Color3.fromRGB(255,255,255)
+	t.Thickness=2
+	table.insert(snowflakes,flake)
+end
+
+RunService.RenderStepped:Connect(function(dt)
+	for _,flake in pairs(snowflakes) do
+		local newY=flake.Position.Y.Offset + dt*40
+		if newY>frame.AbsoluteSize.Y then newY=0; flake.Position=UDim2.new(math.random(),0,0,newY)
+		else flake.Position=UDim2.new(flake.Position.X.Scale,0,0,newY) end
+	end
+	for _,p in pairs(particles) do
+		local newY=p.Position.Y.Scale+dt*0.03
+		if newY>1 then p.Position=UDim2.new(math.random(),0,0,0)
+		else p.Position=UDim2.new(p.Position.X.Scale,0,newY,0) end
+	end
 end)
 
--- Destroy Turrets
-task.spawn(function()
-    while task.wait(1) do
-        if Toggles.AutoDestroyTurret then
-            for _,v in pairs(workspace:GetDescendants()) do
-                if v:IsA("BasePart") and v.Name:lower():find("turret") then
-                    v:Destroy()
-                end
-            end
-        end
-    end
-end)
-
--- Grapple Speed
-RS.Heartbeat:Connect(function()
-    if Humanoid then
-        Humanoid.WalkSpeed = Toggles.GrappleSpeed and 40 or 16
-    end
-end)
-
--- Infinite Jump
-UIS.JumpRequest:Connect(function()
-    if Toggles.InfiniteJump and Humanoid then
-        Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-    end
-end)
-
--- ================= RENDER =================
-RS.RenderStepped:Connect(function()
-    bg.Position = pos
-    header.Position = pos
-    sidebar.Position = pos + Vector2.new(0,44)
-    title.Position = pos + Vector2.new(18,12)
-
-    for i,name in ipairs(tabs) do
-        local b = tabButtons[name]
-        b.Position = pos + Vector2.new(26,64+(i-1)*46)
-        b.Color = (name==currentTab) and theme.accent or theme.text
-    end
-
-    for _,t in ipairs(togglesUI) do
-        local y = pos.Y + 70 + (t.index-1)*32
-        t.label.Position = Vector2.new(pos.X+90,y)
-        t.track.Position = Vector2.new(pos.X+size.X-80,y+2)
-        t.knob.Position = t.track.Position + Vector2.new(Toggles[t.flag] and 26 or 2,1)
-    end
-end)
-
--- ================= INPUT =================
-UIS.InputBegan:Connect(function(i)
-    if i.KeyCode == Enum.KeyCode.RightShift then
-        visible = not visible
-        for _,o in ipairs(objects) do o.Visible = visible end
-    end
-
-    if i.UserInputType == Enum.UserInputType.MouseButton1 then
-        local m = UIS:GetMouseLocation()
-
-        if m.X>=pos.X and m.X<=pos.X+size.X and m.Y>=pos.Y and m.Y<=pos.Y+44 then
-            dragging=true
-            dragOffset=m-pos
-        end
-
-        for _,t in ipairs(togglesUI) do
-            local p=t.track.Position
-            if m.X>=p.X and m.X<=p.X+44 and m.Y>=p.Y and m.Y<=p.Y+18 then
-                Toggles[t.flag]=not Toggles[t.flag]
-            end
-        end
-    end
-end)
-
-UIS.InputEnded:Connect(function(i)
-    if i.UserInputType==Enum.UserInputType.MouseButton1 then dragging=false end
-end)
-
-UIS.InputChanged:Connect(function(i)
-    if dragging and i.UserInputType==Enum.UserInputType.MouseMovement then
-        pos=UIS:GetMouseLocation()-dragOffset
-    end
-end)
-
-print("HAVOC HUB FULLY LOADED | XENO")
+-- Smooth open
+frame.Size=UDim2.new(0,0,0,0)
+TweenService:Create(frame,TweenInfo.new(.5,Enum.EasingStyle.Back),{Size=UDim2.new(0,250,0,350)}):Play()
