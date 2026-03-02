@@ -1,233 +1,261 @@
-repeat task.wait() until game:IsLoaded()
-
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local UIS = game:GetService("UserInputService")
-local TweenService = game:GetService("TweenService")
+local CoreGui = game:GetService("CoreGui")
+local camera = workspace.CurrentCamera
 local Lighting = game:GetService("Lighting")
-local Stats = game:GetService("Stats")
+local Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+
 local player = Players.LocalPlayer
-local PlayerGui = player:WaitForChild("PlayerGui")
+local FILE_NAME = "CryzsnConfig.json"
 
-pcall(function() PlayerGui:FindFirstChild("HAVOC_FINAL_BOSS_CINEMATIC"):Destroy() end)
+------------------------------------------------
+-- GUI SETUP
+------------------------------------------------
 
--- Main GUI
-local gui = Instance.new("ScreenGui")
-gui.Name = "HAVOC_FINAL_BOSS_CINEMATIC"
-gui.ResetOnSpawn = false
-gui.Parent = PlayerGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name="CryzsnSystem"
+screenGui.ResetOnSpawn=false
 
-local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0,250,0,350)
-frame.Position = UDim2.new(0.35,0,0.3,0)
-frame.BackgroundColor3 = Color3.fromRGB(15,10,25)
-frame.BorderSizePixel = 0
-Instance.new("UICorner", frame).CornerRadius = UDim.new(0,16)
-
--- Neon border
-local stroke = Instance.new("UIStroke", frame)
-stroke.Thickness = 3
-
--- Animated galaxy background
-local bg = Instance.new("Frame", frame)
-bg.Size = UDim2.new(1,0,1,0)
-bg.BackgroundColor3 = Color3.fromRGB(5,5,15)
-bg.BorderSizePixel = 0
-Instance.new("UICorner", bg).CornerRadius = UDim.new(0,16)
-
-local particles = {}
-for i=1,60 do
-	local p = Instance.new("Frame")
-	p.Size = UDim2.new(0,2,0,2)
-	p.Position = UDim2.new(math.random(),0,math.random(),0)
-	p.BackgroundColor3 = Color3.fromRGB(255,255,255)
-	p.BackgroundTransparency = math.random()*0.8
-	p.BorderSizePixel = 0
-	p.Parent = bg
-	table.insert(particles,p)
-end
-
--- Title
-local title = Instance.new("TextLabel", frame)
-title.Size = UDim2.new(1,0,0,45)
-title.Position = UDim2.new(0,0,0,0)
-title.BackgroundTransparency = 1
-title.Font = Enum.Font.GothamBlack
-title.TextScaled = true
-title.Text = "HAVOC HUB DUEL HELPER"
-title.TextColor3 = Color3.new(1,1,1)
-
--- FPS/Ping
-local counter = Instance.new("TextLabel", gui)
-counter.Size = UDim2.new(0,180,0,25)
-counter.Position = UDim2.new(0,10,0,10)
-counter.BackgroundTransparency = 1
-counter.Font = Enum.Font.GothamBold
-counter.TextScaled = true
-counter.TextColor3 = Color3.new(1,1,1)
-RunService.RenderStepped:Connect(function(dt)
-	local fps = math.floor(1/dt)
-	local ping = 0
-	pcall(function() ping = math.floor(Stats.Network.ServerStatsItem["Data Ping"]:GetValue()) end)
-	counter.Text = "FPS "..fps.." | "..ping.." ms"
+pcall(function()
+	screenGui.Parent = CoreGui:FindFirstChild("RobloxGui") or CoreGui
 end)
 
--- Buttons
-local contentFrame = Instance.new("Frame", frame)
-contentFrame.Size = UDim2.new(1,-20,1,-90)
-contentFrame.Position = UDim2.new(0,10,0,90)
-contentFrame.BackgroundTransparency = 1
-local function createButton(name,posY)
-	local b = Instance.new("TextButton", contentFrame)
-	b.Size = UDim2.new(0.9,0,0,35)
-	b.Position = UDim2.new(0.05,0,0,posY)
-	b.Text = name
-	b.Font = Enum.Font.GothamBold
-	b.TextScaled = true
-	b.TextColor3 = Color3.new(1,1,1)
-	b.BackgroundColor3 = Color3.fromRGB(150,40,220)
-	Instance.new("UICorner", b)
+if not screenGui.Parent then
+	screenGui.Parent = player:WaitForChild("PlayerGui")
+end
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Size=UDim2.new(0,160,0,220)
+mainFrame.Position=UDim2.new(.5,-80,.3,0)
+mainFrame.BackgroundColor3=Color3.fromRGB(0,0,0)
+mainFrame.Active=true
+mainFrame.Draggable=true
+mainFrame.Parent=screenGui
+
+Instance.new("UICorner",mainFrame).CornerRadius=UDim.new(0,10)
+
+local stroke=Instance.new("UIStroke",mainFrame)
+stroke.Color=Color3.fromRGB(160,32,240)
+
+local title=Instance.new("TextLabel")
+title.Size=UDim2.new(1,0,0,35)
+title.BackgroundTransparency=1
+title.Text="HAVOC DUEL HELPER"
+title.Font=Enum.Font.LuckiestGuy
+title.TextColor3=Color3.fromRGB(190,100,255)
+title.TextSize=14
+title.Parent=mainFrame
+
+------------------------------------------------
+-- ❄️ GLOWING SNOWFLAKES
+------------------------------------------------
+
+local snowFolder=Instance.new("Folder",screenGui)
+snowFolder.Name="Snowflakes"
+
+local snowflakes={}
+
+local function createSnow()
+
+	local size=math.random(3,7)
+
+	local snow=Instance.new("Frame")
+	snow.Size=UDim2.new(0,size,0,size)
+	snow.BackgroundColor3=Color3.new(1,1,1)
+	snow.BorderSizePixel=0
+	snow.BackgroundTransparency=.05
+
+	Instance.new("UICorner",snow).CornerRadius=UDim.new(1,0)
+
+	local glow=Instance.new("UIStroke")
+	glow.Thickness=2
+	glow.Transparency=.4
+	glow.Color=Color3.fromRGB(220,220,255)
+	glow.Parent=snow
+
+	snow.Position=UDim2.new(math.random(),0,-.1,0)
+	snow.ZIndex=0
+	snow.Parent=snowFolder
+
+	table.insert(snowflakes,{
+		Obj=snow,
+		Speed=math.random(8,16)/100
+	})
+end
+
+for i=1,55 do
+	createSnow()
+end
+
+RunService.Heartbeat:Connect(function(dt)
+
+	for _,data in ipairs(snowflakes) do
+
+		local snow=data.Obj
+		local pos=snow.Position
+
+		snow.Position=UDim2.new(
+			pos.X.Scale,
+			0,
+			pos.Y.Scale+(data.Speed*dt),
+			0
+		)
+
+		if snow.Position.Y.Scale>1.1 then
+			snow.Position=UDim2.new(math.random(),0,-.1,0)
+		end
+	end
+end)
+
+------------------------------------------------
+-- BUTTON CREATION
+------------------------------------------------
+
+local function createBtn(text,pos,save)
+
+	local b=Instance.new("TextButton")
+	b.Size=UDim2.new(.85,0,0,28)
+	b.Position=pos
+	b.BackgroundColor3=save and Color3.fromRGB(0,80,0)
+	or Color3.fromRGB(45,0,70)
+
+	b.Text=text
+	b.Font=Enum.Font.LuckiestGuy
+	b.TextColor3=Color3.new(1,1,1)
+	b.TextSize=13
+	b.Parent=mainFrame
+
+	Instance.new("UICorner",b)
+
 	return b
 end
-local galaxyBtn = createButton("Galaxy: OFF",0)
-local starBtn = createButton("Stars: OFF",50)
-local fovBtn = createButton("FOV: OFF",100)
 
--- Draggable
-do
-	local dragging=false
-	local dragStart
-	local startPos
-	local dragInput
-	frame.InputBegan:Connect(function(input)
-		if input.UserInputType==Enum.UserInputType.MouseButton1 then
-			dragging=true
-			dragStart=input.Position
-			startPos=frame.Position
-			input.Changed:Connect(function()
-				if input.UserInputState==Enum.UserInputState.End then dragging=false end
-			end)
-		end
-	end)
-	frame.InputChanged:Connect(function(input)
-		if input.UserInputType==Enum.UserInputType.MouseMovement then dragInput=input end
-	end)
-	UIS.InputChanged:Connect(function(input)
-		if dragging and input==dragInput then
-			local delta=input.Position-dragStart
-			frame.Position=UDim2.new(startPos.X.Scale,startPos.X.Offset+delta.X,startPos.Y.Scale,startPos.Y.Offset+delta.Y)
-		end
-	end)
+local fovBtn=createBtn("FOV: OFF",UDim2.new(.075,0,.18,0))
+local galaxyBtn=createBtn("GALAXY MODE: OFF",UDim2.new(.075,0,.33,0))
+local antiBatBtn=createBtn("ANTI BAT: OFF",UDim2.new(.075,0,.48,0))
+local antiFlingBtn=createBtn("ANTI-FLING: OFF",UDim2.new(.075,0,.63,0))
+local saveBtn=createBtn("SAVE CONFIG",UDim2.new(.075,0,.82,0),true)
+
+------------------------------------------------
+-- STATES
+------------------------------------------------
+
+local fovOn=false
+local galaxyOn=false
+local antiBatOn=false
+local antiFlingOn=false
+
+local detectDistance=15
+
+local defBrightness=Lighting.Brightness
+local defClock=Lighting.ClockTime
+local defAmbient=Lighting.OutdoorAmbient
+
+------------------------------------------------
+-- GALAXY MODE
+------------------------------------------------
+
+local function updateGalaxy()
+
+	galaxyBtn.Text=galaxyOn and "GALAXY MODE: ON" or "GALAXY MODE: OFF"
+
+	if galaxyOn then
+
+		local sky=Instance.new("Sky")
+		sky.Name="GalaxySky"
+
+		sky.SkyboxBk="rbxassetid://159454299"
+		sky.SkyboxDn="rbxassetid://159454296"
+		sky.SkyboxFt="rbxassetid://159454293"
+		sky.SkyboxLf="rbxassetid://159454286"
+		sky.SkyboxRt="rbxassetid://159454289"
+		sky.SkyboxUp="rbxassetid://159454291"
+
+		sky.Parent=Lighting
+
+		Lighting.Brightness=0
+		Lighting.ClockTime=0
+		Lighting.ExposureCompensation=-2
+		Lighting.OutdoorAmbient=Color3.new()
+
+	else
+
+		local s=Lighting:FindFirstChild("GalaxySky")
+		if s then s:Destroy() end
+
+		Lighting.Brightness=defBrightness
+		Lighting.ClockTime=defClock
+		Lighting.OutdoorAmbient=defAmbient
+	end
 end
 
--- K toggle
-UIS.InputBegan:Connect(function(key,gp)
-	if gp then return end
-	if key.KeyCode==Enum.KeyCode.K then
-		frame.Visible=not frame.Visible
-	end
+------------------------------------------------
+-- BUTTONS
+------------------------------------------------
+
+fovBtn.MouseButton1Click:Connect(function()
+
+	fovOn=not fovOn
+	camera.FieldOfView=fovOn and 100 or 70
+
+	fovBtn.Text=fovOn and "FOV: ON" or "FOV: OFF"
+
 end)
 
--- Rainbow title + neon border
-task.spawn(function()
-	local hue=0
-	while frame.Parent do
-		hue+=0.005
-		title.TextColor3=Color3.fromHSV(hue%1,1,1)
-		stroke.Color=Color3.fromHSV(hue%1,0.8,1)
-		RunService.RenderStepped:Wait()
-	end
-end)
-
--- Galaxy toggle
-local galaxy=false
 galaxyBtn.MouseButton1Click:Connect(function()
-	galaxy=not galaxy
-	if galaxy then
-		Lighting.Ambient=Color3.fromRGB(90,0,180)
-		Lighting.OutdoorAmbient=Color3.fromRGB(120,0,255)
-	else
-		Lighting.Ambient=Color3.new(.5,.5,.5)
-	end
-	galaxyBtn.Text="Galaxy: "..(galaxy and "ON" or "OFF")
+
+	galaxyOn=not galaxyOn
+	updateGalaxy()
+
 end)
 
--- Shooting stars with glow trails
-local stars=false
-local function star()
+antiBatBtn.MouseButton1Click:Connect(function()
+
+	antiBatOn=not antiBatOn
+	antiBatBtn.Text=antiBatOn and "ANTI BAT: ON" or "ANTI BAT: OFF"
+
+end)
+
+antiFlingBtn.MouseButton1Click:Connect(function()
+
+	antiFlingOn=not antiFlingOn
+	antiFlingBtn.Text=antiFlingOn and "ANTI-FLING: ON" or "ANTI-FLING: OFF"
+
+end)
+
+------------------------------------------------
+-- ANTI FLING
+------------------------------------------------
+
+RunService.Stepped:Connect(function()
+
+	if not antiFlingOn then return end
+
 	local char=player.Character
 	if not char then return end
-	local root=char:FindFirstChild("HumanoidRootPart")
-	if not root then return end
-	local p=Instance.new("Part")
-	p.Anchored=true
-	p.CanCollide=false
-	p.Material=Enum.Material.Neon
-	p.Color=Color3.new(1,1,1)
-	p.Size=Vector3.new(.5,.5,6)
-	p.Parent=workspace
-	p.Position=root.Position+Vector3.new(math.random(-200,200),200,math.random(-200,200))
-	-- Trail
-	local t=Instance.new("Trail",p)
-	t.Lifetime=0.4
-	t.Attachment0=Instance.new("Attachment",p)
-	t.Attachment1=Instance.new("Attachment",p)
-	t.Color=ColorSequence.new(Color3.fromRGB(255,255,255))
-	t.Transparency=NumberSequence.new(0.5,1)
-	local life=0
-	local con
-	con=RunService.RenderStepped:Connect(function(dt)
-		life+=dt
-		p.Position+=Vector3.new(-70,-9,-70)*dt
-		if life>2 then con:Disconnect(); p:Destroy() end
-	end)
-end
-starBtn.MouseButton1Click:Connect(function()
-	stars=not stars
-	starBtn.Text="Stars: "..(stars and "ON" or "OFF")
-	if stars then task.spawn(function() while stars do star() task.wait(3) end end) end
-end)
 
--- FOV toggle
-local camera=workspace.CurrentCamera
-local fov=false
-fovBtn.MouseButton1Click:Connect(function()
-	fov=not fov
-	camera.FieldOfView=fov and 110 or 70
-	fovBtn.Text="FOV: "..(fov and "ON" or "OFF")
-end)
-
--- Snowflakes with glow trails
-local snowflakes={}
-for i=1,25 do
-	local flake=Instance.new("Frame")
-	flake.Size=UDim2.new(0,math.random(2,4),0,math.random(2,4))
-	flake.BackgroundColor3=Color3.fromRGB(255,255,255)
-	flake.BackgroundTransparency=math.random()*0.7
-	Instance.new("UICorner",flake)
-	flake.Position=UDim2.new(math.random(),0,0,0)
-	flake.Parent=frame
-	-- Glow trail
-	local t=Instance.new("UIStroke",flake)
-	t.Transparency=0.7
-	t.Color=Color3.fromRGB(255,255,255)
-	t.Thickness=2
-	table.insert(snowflakes,flake)
-end
-
-RunService.RenderStepped:Connect(function(dt)
-	for _,flake in pairs(snowflakes) do
-		local newY=flake.Position.Y.Offset + dt*40
-		if newY>frame.AbsoluteSize.Y then newY=0; flake.Position=UDim2.new(math.random(),0,0,newY)
-		else flake.Position=UDim2.new(flake.Position.X.Scale,0,0,newY) end
-	end
-	for _,p in pairs(particles) do
-		local newY=p.Position.Y.Scale+dt*0.03
-		if newY>1 then p.Position=UDim2.new(math.random(),0,0,0)
-		else p.Position=UDim2.new(p.Position.X.Scale,0,newY,0) end
+	for _,v in pairs(char:GetDescendants()) do
+		if v:IsA("BasePart") then
+			v.CanCollide=false
+		end
 	end
 end)
 
--- Smooth open
-frame.Size=UDim2.new(0,0,0,0)
-TweenService:Create(frame,TweenInfo.new(.5,Enum.EasingStyle.Back),{Size=UDim2.new(0,250,0,350)}):Play()
+------------------------------------------------
+-- TOGGLE KEY (K)
+------------------------------------------------
+
+local guiVisible=true
+
+UserInputService.InputBegan:Connect(function(input,processed)
+
+	if processed then return end
+
+	if input.KeyCode==Enum.KeyCode.K then
+
+		guiVisible=not guiVisible
+		mainFrame.Visible=guiVisible
+
+	end
+end)
