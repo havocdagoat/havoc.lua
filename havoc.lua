@@ -48,66 +48,97 @@ title.TextSize=14
 title.Parent=mainFrame
 
 ------------------------------------------------
--- ❄️ GLOWING SNOWFLAKES
+-- ❄️ GUI SNOW (VISIBLE ONLY + DEPTH)
 ------------------------------------------------
 
-local snowFolder=Instance.new("Folder",screenGui)
-snowFolder.Name="Snowflakes"
+local snowFolder = Instance.new("Folder")
+snowFolder.Name = "GuiSnow"
+snowFolder.Parent = mainFrame
 
-local snowflakes={}
+local snowflakes = {}
 
-local function createSnow()
+-- Depth layers
+local LAYERS = {
+	{SizeMin = 6, SizeMax = 8, SpeedMin = 8,  SpeedMax = 12},  -- back layer (big slow)
+	{SizeMin = 3, SizeMax = 5, SpeedMin = 18, SpeedMax = 28}   -- front layer (small fast)
+}
 
-	local size=math.random(3,7)
+local function createSnow(layer)
 
-	local snow=Instance.new("Frame")
-	snow.Size=UDim2.new(0,size,0,size)
-	snow.BackgroundColor3=Color3.new(1,1,1)
-	snow.BorderSizePixel=0
-	snow.BackgroundTransparency=.05
+	local size = math.random(layer.SizeMin, layer.SizeMax)
 
-	Instance.new("UICorner",snow).CornerRadius=UDim.new(1,0)
+	local snow = Instance.new("Frame")
+	snow.Size = UDim2.new(0,size,0,size)
+	snow.BackgroundColor3 = Color3.new(1,1,1)
+	snow.BorderSizePixel = 0
+	snow.BackgroundTransparency = 0.1
+	snow.ZIndex = layer == LAYERS[1] and 0 or 2
 
-	local glow=Instance.new("UIStroke")
-	glow.Thickness=2
-	glow.Transparency=.4
-	glow.Color=Color3.fromRGB(220,220,255)
-	glow.Parent=snow
+	Instance.new("UICorner", snow).CornerRadius = UDim.new(1,0)
 
-	snow.Position=UDim2.new(math.random(),0,-.1,0)
-	snow.ZIndex=0
-	snow.Parent=snowFolder
+	local glow = Instance.new("UIStroke")
+	glow.Thickness = layer == LAYERS[1] and 1 or 2
+	glow.Transparency = 0.4
+	glow.Color = Color3.fromRGB(220,220,255)
+	glow.Parent = snow
+
+	snow.Position = UDim2.new(math.random(),0,-0.1,0)
+	snow.Parent = snowFolder
 
 	table.insert(snowflakes,{
-		Obj=snow,
-		Speed=math.random(8,16)/100
+		Obj = snow,
+		Speed = math.random(layer.SpeedMin, layer.SpeedMax)/100
 	})
 end
 
-for i=1,55 do
-	createSnow()
+local function spawnSnow()
+
+	for _,v in ipairs(snowflakes) do
+		if v.Obj then
+			v.Obj:Destroy()
+		end
+	end
+	table.clear(snowflakes)
+
+	for _,layer in ipairs(LAYERS) do
+		for i = 1,15 do
+			createSnow(layer)
+		end
+	end
+end
+
+local function clearSnow()
+	for _,v in ipairs(snowflakes) do
+		if v.Obj then
+			v.Obj:Destroy()
+		end
+	end
+	table.clear(snowflakes)
 end
 
 RunService.Heartbeat:Connect(function(dt)
 
+	if not mainFrame.Visible then return end
+
 	for _,data in ipairs(snowflakes) do
 
-		local snow=data.Obj
-		local pos=snow.Position
+		local snow = data.Obj
+		if not snow then continue end
 
-		snow.Position=UDim2.new(
+		local pos = snow.Position
+
+		snow.Position = UDim2.new(
 			pos.X.Scale,
 			0,
-			pos.Y.Scale+(data.Speed*dt),
+			pos.Y.Scale + (data.Speed * dt),
 			0
 		)
 
-		if snow.Position.Y.Scale>1.1 then
-			snow.Position=UDim2.new(math.random(),0,-.1,0)
+		if snow.Position.Y.Scale > 1.1 then
+			snow.Position = UDim2.new(math.random(),0,-0.1,0)
 		end
 	end
 end)
-
 ------------------------------------------------
 -- BUTTON CREATION
 ------------------------------------------------
