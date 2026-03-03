@@ -246,16 +246,24 @@ end)
 -- TOGGLE KEY (K)
 ------------------------------------------------
 
-local guiVisible=true
+local guiVisible = true
+
+spawnSnow() -- start snow when GUI loads
 
 UserInputService.InputBegan:Connect(function(input,processed)
 
 	if processed then return end
 
-	if input.KeyCode==Enum.KeyCode.K then
+	if input.KeyCode == Enum.KeyCode.K then
 
-		guiVisible=not guiVisible
-		mainFrame.Visible=guiVisible
+		guiVisible = not guiVisible
+		mainFrame.Visible = guiVisible
+
+		if guiVisible then
+			spawnSnow()
+		else
+			clearSnow()
+		end
 
 	end
 end)
