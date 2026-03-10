@@ -196,8 +196,69 @@ btnAuto1.TextSize = 14
 styleBlueButton(btnAuto1)
 
 local auto2 = false
-local btnAuto2 = btnAuto1:Clone()
-btnAuto2.Text = "AUTO PLAY 2"
-btnAuto2.Position = UDim2.new(0,5,0,234)
-btnAuto2.Parent = settings
-styleBlueButton(btnAuto2)
+local btnAuto2 -- SETTINGS TOGGLE (Start button now only opens settings if right-clicked)
+startBtn.MouseButton2Click:Connect(function()
+	settings.Visible = not settings.Visible
+	frame.Size = settings.Visible and UDim2.new(0,190,0,360) or UDim2.new(0,190,0,90)
+end)
+
+-- START AUTO PLAY BUTTON
+local autoStart = false
+
+startBtn.MouseButton1Click:Connect(function()
+
+	autoStart = not autoStart
+	startBtn.BackgroundColor3 = autoStart and Color3.fromRGB(0,255,170) or Color3.fromRGB(0,140,255)
+
+	if not autoStart then return end
+
+	task.spawn(function()
+
+		-- AUTO PLAY PATH 1
+		local r = hrp(lp.Character)
+		if not r then return end
+
+		local function go(pos, speed, cond)
+
+			while cond() and (r.Position - pos).Magnitude > 0.6 do
+
+				local dist = (r.Position - pos).Magnitude
+				local useSpeed = speed
+
+				if pos == A1_P2 then
+					if dist < 3 then useSpeed = SPEED_A1_P2_1 end
+					if dist < 1.5 then useSpeed = SPEED_A1_P2_2 end
+				end
+
+				if pos == B2 and dist < 3 then
+					useSpeed = SPEED_B2_FINAL
+				end
+
+				local dir = (pos - r.Position).Unit
+
+				r.AssemblyLinearVelocity = Vector3.new(
+					dir.X * useSpeed,
+					r.AssemblyLinearVelocity.Y,
+					dir.Z * useSpeed
+				)
+
+				task.wait()
+
+			end
+
+		end
+
+		go(A1_P1,SPEED_IDA,function()return autoStart end)
+		go(A1_P2,SPEED_IDA,function()return autoStart end)
+
+		task.wait(PAUSE)
+
+		go(A1_P1,SPEED_VOLTA,function()return autoStart end)
+		go(A1_P3,SPEED_VOLTA,function()return autoStart end)
+
+		autoStart = false
+		startBtn.BackgroundColor3 = Color3.fromRGB(0,140,255)
+
+	end)
+
+end)
