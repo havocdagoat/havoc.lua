@@ -918,7 +918,7 @@ end)
 
 local title = Instance.new("TextLabel", frame)
 title.Size = UDim2.new(1,0,0,28); title.Position = UDim2.new(0,0,0,6)
-title.BackgroundTransparency = 1; title.Text = "LUNIX DUELS"
+title.BackgroundTransparency = 1; title.Text = "HAVOC DUELS"
 title.TextColor3 = theme.white; title.TextSize = 16; title.Font = Enum.Font.GothamBold
 
 local divider = Instance.new("Frame", frame)
