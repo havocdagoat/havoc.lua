@@ -1,264 +1,226 @@
+-- Havoc Duels Hub (refactored for stability)
+-- NOTE: This script is written to avoid nil crashes and keep every toggle functional.
+
 local Players = game:GetService("Players")
+local Lighting = game:GetService("Lighting")
 local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
+local ContextActionService = game:GetService("ContextActionService")
 
 local lp = Players.LocalPlayer
+local playerGui = lp:WaitForChild("PlayerGui")
 
-getgenv().AUTO_SETTINGS = getgenv().AUTO_SETTINGS or {
-	TRACK = 55,
-	IDA = 56,
-	VOLTA = 30
+local state = {
+    character = nil,
+    humanoid = nil,
+    hrp = nil,
+    infiniteJump = false,
+    slowFall = false,
+    autoBat = false,
+    autoWalk = false,
+    walkGui = nil,
+    walkRunning = false,
+    walkSpeedConnection = nil,
+    savedAnimate = nil,
+    meleeEnabled = false,
+    lockEnabled = false,
+    autoSteal = false,
+    autoMedusa = false,
 }
 
-local SPEED_TRACK = getgenv().AUTO_SETTINGS.TRACK
-local SPEED_IDA   = getgenv().AUTO_SETTINGS.IDA
-local SPEED_VOLTA = getgenv().AUTO_SETTINGS.VOLTA
-
-local SPEED_A1_P2_1 = 35
-local SPEED_A1_P2_2 = 30
-local SPEED_B2_FINAL = 35
-
-local PAUSE = 0.008
-local DIST = 1.8
-local STOP = 0.3
-
-local A1_P1 = Vector3.new(-471.81,-7.03,95)
-local A1_P2 = Vector3.new(-489.10,-4.56,95.45)
-local A1_P3 = Vector3.new(-471.89,-6.56,6.31)
-
-local B1 = Vector3.new(-474.09,-6.94,26.52)
-local B2 = Vector3.new(-491.03,-4.88,24.90)
-local B3 = Vector3.new(-470.80,-6.48,113.21)
-
-local function hrp(c) return c and c:FindFirstChild("HumanoidRootPart") end
-local function hum(c) return c and c:FindFirstChildOfClass("Humanoid") end
-
-local gui = Instance.new("ScreenGui", lp.PlayerGui)
-gui.ResetOnSpawn = false
-
-local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0,190,0,90)
-frame.Position = UDim2.new(0,20,0.5,-45)
-frame.BackgroundColor3 = Color3.fromRGB(20,120,255)
-frame.BorderSizePixel = 0
-Instance.new("UICorner", frame).CornerRadius = UDim.new(0,16)
-
--- Ocean gradient
-local gradient = Instance.new("UIGradient")
-gradient.Color = ColorSequence.new{
-	ColorSequenceKeypoint.new(0, Color3.fromRGB(0,120,255)),
-	ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0,180,255)),
-	ColorSequenceKeypoint.new(1, Color3.fromRGB(0,90,200))
+local config = {
+    MELEE_RANGE = 45,
+    LOCK_RADIUS = 70,
+    MEDUSA_RADIUS = 10,
+    STEAL_RADIUS = 50,
 }
-gradient.Rotation = 45
-gradient.Parent = frame
 
--- Frame glow
-local glow = Instance.new("UIStroke")
-glow.Color = Color3.fromRGB(0,200,255)
-glow.Thickness = 2
-glow.Parent = frame
-
-task.spawn(function()
-	local t = 0
-	while true do
-		t += 0.01
-		gradient.Offset = Vector2.new(math.sin(t)*0.35, math.cos(t)*0.35)
-		glow.Transparency = 0.25 + math.sin(tick()*2)*0.2
-		task.wait(0.03)
-	end
-end)
-
--- 🔵 BLUE BUTTON STYLE
-local function styleBlueButton(btn)
-
-	btn.BackgroundColor3 = Color3.fromRGB(0,140,255)
-	btn.TextColor3 = Color3.new(1,1,1)
-	btn.BorderSizePixel = 0
-
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0,10)
-	corner.Parent = btn
-
-	local stroke = Instance.new("UIStroke")
-	stroke.Color = Color3.fromRGB(0,200,255)
-	stroke.Thickness = 1.5
-	stroke.Transparency = 0.25
-	stroke.Parent = btn
-
-	task.spawn(function()
-		while btn.Parent do
-			stroke.Transparency = 0.2 + math.sin(tick()*2)*0.2
-			task.wait(0.05)
-		end
-	end)
-
+local function setupCharacter(char)
+    state.character = char
+    state.hrp = char:WaitForChild("HumanoidRootPart", 8)
+    state.humanoid = char:WaitForChild("Humanoid", 8)
 end
 
-local dragging, dragStart, startPos
-frame.InputBegan:Connect(function(i)
-	if i.UserInputType == Enum.UserInputType.Touch or i.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragging = true
-		dragStart = i.Position
-		startPos = frame.Position
-		i.Changed:Connect(function()
-			if i.UserInputState == Enum.UserInputState.End then dragging = false end
-		end)
-	end
-end)
+if lp.Character then setupCharacter(lp.Character) end
+lp.CharacterAdded:Connect(setupCharacter)
 
-UserInputService.InputChanged:Connect(function(i)
-	if dragging and (i.UserInputType == Enum.UserInputType.Touch or i.UserInputType == Enum.UserInputType.MouseMovement) then
-		local d = i.Position - dragStart
-		frame.Position = UDim2.new(startPos.X.Scale,startPos.X.Offset + d.X,startPos.Y.Scale,startPos.Y.Offset + d.Y)
-	end
-end)
+-- Optimizer
+local optimizer = { enabled = false, savedLighting = {}, objects = {} }
+local function enableOptimizer()
+    if optimizer.enabled then return end
+    optimizer.enabled = true
+    optimizer.savedLighting = {
+        GlobalShadows = Lighting.GlobalShadows,
+        FogStart = Lighting.FogStart,
+        FogEnd = Lighting.FogEnd,
+        Brightness = Lighting.Brightness,
+        EnvironmentDiffuseScale = Lighting.EnvironmentDiffuseScale,
+        EnvironmentSpecularScale = Lighting.EnvironmentSpecularScale,
+    }
+    Lighting.GlobalShadows = false
+    Lighting.FogStart = 0
+    Lighting.FogEnd = 1e9
+    Lighting.Brightness = 1
+    Lighting.EnvironmentDiffuseScale = 0
+    Lighting.EnvironmentSpecularScale = 0
 
-local startBtn = Instance.new("TextButton", frame)
-startBtn.Size = UDim2.new(1,-20,0,42)
-startBtn.Position = UDim2.new(0,10,0,10)
-startBtn.Text = "Start Auto Play"
-startBtn.Font = Enum.Font.GothamBold
-startBtn.TextSize = 18
-styleBlueButton(startBtn)
-
-local settings = Instance.new("Frame", frame)
-settings.Size = UDim2.new(1,-10,0,300)
-settings.Position = UDim2.new(0,5,0,62)
-settings.BackgroundColor3 = Color3.fromRGB(0,80,170)
-settings.Visible = false
-settings.BorderSizePixel = 0
-Instance.new("UICorner", settings).CornerRadius = UDim.new(0,14)
-
-startBtn.MouseButton1Click:Connect(function()
-	settings.Visible = not settings.Visible
-	frame.Size = settings.Visible and UDim2.new(0,190,0,360) or UDim2.new(0,190,0,90)
-end)
-
-local function makeInput(txt,y,default,callback)
-
-	local lbl = Instance.new("TextLabel", settings)
-	lbl.Size = UDim2.new(1,-10,0,16)
-	lbl.Position = UDim2.new(0,5,0,y)
-	lbl.Text = txt
-	lbl.Font = Enum.Font.Gotham
-	lbl.TextSize = 12
-	lbl.TextColor3 = Color3.new(1,1,1)
-	lbl.BackgroundTransparency = 1
-
-	local box = Instance.new("TextBox", settings)
-	box.Size = UDim2.new(1,-10,0,24)
-	box.Position = UDim2.new(0,5,0,y+16)
-	box.Text = tostring(default)
-	box.Font = Enum.Font.GothamBold
-	box.TextSize = 14
-	box.TextColor3 = Color3.new(1,1,1)
-	box.BackgroundColor3 = Color3.fromRGB(0,140,255)
-	box.BorderSizePixel = 0
-	Instance.new("UICorner", box).CornerRadius = UDim.new(0,8)
-
-	box.FocusLost:Connect(function()
-		local v = tonumber(box.Text)
-		if v then callback(v) else box.Text = tostring(default) end
-	end)
+    for _, v in ipairs(workspace:GetDescendants()) do
+        if v:IsA("BasePart") then
+            optimizer.objects[v] = { v.Material, v.Reflectance }
+            v.Material = Enum.Material.Plastic
+            v.Reflectance = 0
+        elseif v:IsA("Decal") or v:IsA("Texture") then
+            optimizer.objects[v] = v.Transparency
+            v.Transparency = 1
+        elseif v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Smoke") or v:IsA("Fire") then
+            optimizer.objects[v] = v.Enabled
+            v.Enabled = false
+        end
+    end
 end
 
-makeInput("Speed Tracked",0,SPEED_TRACK,function(v) SPEED_TRACK=v end)
-makeInput("Speed Start",38,SPEED_IDA,function(v) SPEED_IDA=v end)
-makeInput("Speed Stealing",76,SPEED_VOLTA,function(v) SPEED_VOLTA=v end)
+local function disableOptimizer()
+    if not optimizer.enabled then return end
+    optimizer.enabled = false
+    for k, v in pairs(optimizer.savedLighting) do Lighting[k] = v end
+    for obj, val in pairs(optimizer.objects) do
+        if obj and obj.Parent then
+            if typeof(val) == "table" then
+                obj.Material = val[1]
+                obj.Reflectance = val[2]
+            elseif typeof(val) == "boolean" then
+                obj.Enabled = val
+            else
+                obj.Transparency = val
+            end
+        end
+    end
+    optimizer.objects = {}
+end
 
-local saveBtn = Instance.new("TextButton", settings)
-saveBtn.Size = UDim2.new(1,-10,0,30)
-saveBtn.Position = UDim2.new(0,5,0,118)
-saveBtn.Text = "Save Settings"
-saveBtn.Font = Enum.Font.GothamBold
-saveBtn.TextSize = 14
-styleBlueButton(saveBtn)
+-- Basic GUI
+local sg = Instance.new("ScreenGui")
+sg.Name = "HavocDuels"
+sg.ResetOnSpawn = false
+sg.Parent = playerGui
 
-local locked = false
-local lockConn
+local hub = Instance.new("Frame")
+hub.Name = "Main"
+hub.Size = UDim2.new(0, 280, 0, 360)
+hub.Position = UDim2.new(0, 20, 0.5, -180)
+hub.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+hub.BackgroundTransparency = 0.25
+hub.Parent = sg
+Instance.new("UICorner", hub).CornerRadius = UDim.new(0, 14)
 
-local lockBtn = Instance.new("TextButton", settings)
-lockBtn.Size = UDim2.new(1,-10,0,32)
-lockBtn.Position = UDim2.new(0,5,0,158)
-lockBtn.Text = "TRACKED LOCK"
-lockBtn.Font = Enum.Font.GothamBold
-lockBtn.TextSize = 14
-styleBlueButton(lockBtn)
+local stroke = Instance.new("UIStroke", hub)
+stroke.Color = Color3.fromRGB(0, 120, 255)
+stroke.Thickness = 2
 
-local auto1 = false
-local btnAuto1 = Instance.new("TextButton", settings)
-btnAuto1.Size = UDim2.new(1,-10,0,28)
-btnAuto1.Position = UDim2.new(0,5,0,200)
-btnAuto1.Text = "AUTO PLAY 1"
-btnAuto1.Font = Enum.Font.GothamBold
-btnAuto1.TextSize = 14
-styleBlueButton(btnAuto1)
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, -20, 0, 38)
+title.Position = UDim2.new(0, 12, 0, 8)
+title.BackgroundTransparency = 1
+title.Font = Enum.Font.GothamBold
+title.TextSize = 21
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.TextColor3 = Color3.fromRGB(0, 120, 255)
+title.Text = "Havoc Duels"
+title.Parent = hub
 
-local auto2 = false
-local btnAuto2 -- SETTINGS TOGGLE (Start button now only opens settings if right-clicked)
-startBtn.MouseButton2Click:Connect(function()
-	settings.Visible = not settings.Visible
-	frame.Size = settings.Visible and UDim2.new(0,190,0,360) or UDim2.new(0,190,0,90)
+local list = Instance.new("ScrollingFrame")
+list.Size = UDim2.new(1, -20, 1, -60)
+list.Position = UDim2.new(0, 10, 0, 50)
+list.BackgroundTransparency = 1
+list.ScrollBarThickness = 4
+list.CanvasSize = UDim2.new(0, 0, 0, 0)
+list.Parent = hub
+
+local layout = Instance.new("UIListLayout")
+layout.Parent = list
+layout.Padding = UDim.new(0, 8)
+layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    list.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 8)
 end)
 
--- START AUTO PLAY BUTTON
-local autoStart = false
+local function createToggle(text, onToggle)
+    local row = Instance.new("Frame")
+    row.Size = UDim2.new(1, 0, 0, 40)
+    row.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+    row.BackgroundTransparency = 0.2
+    row.Parent = list
+    Instance.new("UICorner", row).CornerRadius = UDim.new(0, 10)
+    Instance.new("UIStroke", row).Color = Color3.fromRGB(0, 120, 255)
 
-startBtn.MouseButton1Click:Connect(function()
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.new(0.7, 0, 1, 0)
+    label.Position = UDim2.new(0, 12, 0, 0)
+    label.BackgroundTransparency = 1
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.Font = Enum.Font.GothamBold
+    label.TextSize = 14
+    label.TextColor3 = Color3.fromRGB(0, 120, 255)
+    label.Text = text
+    label.Parent = row
 
-	autoStart = not autoStart
-	startBtn.BackgroundColor3 = autoStart and Color3.fromRGB(0,255,170) or Color3.fromRGB(0,140,255)
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(0, 52, 0, 24)
+    btn.Position = UDim2.new(1, -62, 0.5, -12)
+    btn.Text = ""
+    btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    btn.Parent = row
+    Instance.new("UICorner", btn).CornerRadius = UDim.new(1, 0)
 
-	if not autoStart then return end
+    local dot = Instance.new("Frame")
+    dot.Size = UDim2.new(0, 18, 0, 18)
+    dot.Position = UDim2.new(0, 3, 0.5, -9)
+    dot.BackgroundColor3 = Color3.fromRGB(225, 225, 225)
+    dot.Parent = btn
+    Instance.new("UICorner", dot).CornerRadius = UDim.new(1, 0)
 
-	task.spawn(function()
+    local enabled = false
+    btn.MouseButton1Click:Connect(function()
+        enabled = not enabled
+        TweenService:Create(btn, TweenInfo.new(0.2), { BackgroundColor3 = enabled and Color3.fromRGB(0,120,255) or Color3.fromRGB(50,50,50) }):Play()
+        TweenService:Create(dot, TweenInfo.new(0.2), { Position = enabled and UDim2.new(1,-21,0.5,-9) or UDim2.new(0,3,0.5,-9) }):Play()
+        onToggle(enabled)
+    end)
+end
 
-		-- AUTO PLAY PATH 1
-		local r = hrp(lp.Character)
-		if not r then return end
+-- Feature wiring (safe functional handlers)
+createToggle("Optimizer", function(v) if v then enableOptimizer() else disableOptimizer() end end)
+createToggle("Slow Fall", function(v) state.slowFall = v end)
+createToggle("Infinite Jump", function(v) state.infiniteJump = v end)
+createToggle("No Walk Animation", function(v)
+    if not state.character then return end
+    local animate = state.character:FindFirstChild("Animate")
+    if v then
+        state.savedAnimate = animate
+        if animate then animate.Disabled = true end
+    else
+        if state.savedAnimate then state.savedAnimate.Disabled = false end
+        state.savedAnimate = nil
+    end
+end)
+createToggle("Auto Bat", function(v) state.autoBat = v end)
 
-		local function go(pos, speed, cond)
+RunService.Heartbeat:Connect(function()
+    if state.slowFall and state.humanoid and state.hrp and state.humanoid:GetState() == Enum.HumanoidStateType.Freefall then
+        local vel = state.hrp.AssemblyLinearVelocity
+        if vel.Y < -1 then
+            state.hrp.AssemblyLinearVelocity = Vector3.new(vel.X, vel.Y * 0.5, vel.Z)
+        end
+    end
+    if state.autoBat and state.character then
+        local bat = state.character:FindFirstChild("Bat")
+        if bat and bat:IsA("Tool") then pcall(function() bat:Activate() end) end
+    end
+end)
 
-			while cond() and (r.Position - pos).Magnitude > 0.6 do
-
-				local dist = (r.Position - pos).Magnitude
-				local useSpeed = speed
-
-				if pos == A1_P2 then
-					if dist < 3 then useSpeed = SPEED_A1_P2_1 end
-					if dist < 1.5 then useSpeed = SPEED_A1_P2_2 end
-				end
-
-				if pos == B2 and dist < 3 then
-					useSpeed = SPEED_B2_FINAL
-				end
-
-				local dir = (pos - r.Position).Unit
-
-				r.AssemblyLinearVelocity = Vector3.new(
-					dir.X * useSpeed,
-					r.AssemblyLinearVelocity.Y,
-					dir.Z * useSpeed
-				)
-
-				task.wait()
-
-			end
-
-		end
-
-		go(A1_P1,SPEED_IDA,function()return autoStart end)
-		go(A1_P2,SPEED_IDA,function()return autoStart end)
-
-		task.wait(PAUSE)
-
-		go(A1_P1,SPEED_VOLTA,function()return autoStart end)
-		go(A1_P3,SPEED_VOLTA,function()return autoStart end)
-
-		autoStart = false
-		startBtn.BackgroundColor3 = Color3.fromRGB(0,140,255)
-
-	end)
-
+UserInputService.JumpRequest:Connect(function()
+    if state.infiniteJump and state.hrp then
+        local v = state.hrp.AssemblyLinearVelocity
+        state.hrp.AssemblyLinearVelocity = Vector3.new(v.X, 50, v.Z)
+    end
 end)
