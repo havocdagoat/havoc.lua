@@ -391,13 +391,27 @@ end
 local instaGrabConn = nil
 
 local function startInstaGrab()
-	if instaGrabConn then return end
+	if instaGrabConn then
+		task.cancel(instaGrabConn)
+	end
+
 	instaGrabConn = task.spawn(function()
 		while instaGrabEnabled do
 			local prompt = findNearestStealPrompt()
-			if prompt then triggerPrompt(prompt) end
-			task.wait(INSTA_COOLDOWN)
+
+			if prompt then
+				pcall(function()
+					prompt.HoldDuration = 0
+					prompt.MaxActivationDistance = 9e9
+					prompt.RequiresLineOfSight = false
+
+					fireproximityprompt(prompt, 0)
+				end)
+			end
+
+			task.wait(0.01)
 		end
+
 		instaGrabConn = nil
 	end)
 end
