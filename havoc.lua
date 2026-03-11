@@ -888,7 +888,7 @@ gui.Name = "HavocDuelsUI"; gui.ResetOnSpawn = false
 
 local frame = Instance.new("Frame", gui)
 frame.Name = "MainFrame"
-frame.Size = UDim2.new(0, 240, 0, 455)
+frame.Size = UDim2.new(0, 250, 0, 180)
 frame.Position = UDim2.new(1, 10, 0.5, -227)
 frame.BackgroundColor3 = theme.bg
 frame.BackgroundTransparency = 0.08
