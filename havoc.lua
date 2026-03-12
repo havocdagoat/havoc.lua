@@ -472,7 +472,54 @@ local function findNearestEnemy()
 	end
 	return nearest, nearestDist, nearestTorso
 end
+-- HAVOC AB SYSTEM
+local function startHavocAB()
+	if havocABConn then return end
 
+	havocABConn = RunService.Heartbeat:Connect(function()
+
+		if not havocABEnabled then return end
+
+		local c = player.Character
+		if not c then return end
+
+		local hrp = c:FindFirstChild("HumanoidRootPart")
+		local hum = c:FindFirstChildOfClass("Humanoid")
+
+		if not hrp or not hum then return end
+
+		local bat = findBat()
+
+		if bat and bat.Parent ~= c then
+			pcall(function()
+				hum:EquipTool(bat)
+			end)
+		end
+
+		local target, dist, torso = findNearestEnemy()
+
+		if target and dist and dist < 35 then
+
+			local look = Vector3.new(target.Position.X, hrp.Position.Y, target.Position.Z)
+
+			hrp.CFrame = CFrame.lookAt(hrp.Position, look)
+
+			if bat then
+				pcall(function()
+					bat:Activate()
+				end)
+			end
+
+		end
+	end)
+end
+
+local function stopHavocAB()
+	if havocABConn then
+		havocABConn:Disconnect()
+		havocABConn = nil
+	end
+end
 local function startTargetPlayer()
 	if targetPlayerConn then return end
 	targetPlayerConn = RunService.Heartbeat:Connect(function()
