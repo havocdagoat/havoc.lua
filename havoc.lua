@@ -390,47 +390,87 @@ end
 
 local instaGrabConn = nil
 
-local function startInstaGrab()
-	if instaGrabConn then
-		task.cancel(instaGrabConn)
+-- AUTO GRAB (GUI REMOVED)
+
+local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
+
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local rootPart = character:WaitForChild("HumanoidRootPart")
+
+player.CharacterAdded:Connect(function(char)
+	character = char
+	rootPart = char:WaitForChild("HumanoidRootPart")
+end)
+
+_G.IsGrabbing = false
+
+local function getPos(prompt)
+	local p = prompt.Parent
+	if p:IsA("BasePart") then return p.Position end
+	if p:IsA("Model") then
+		local prim = p.PrimaryPart or p:FindFirstChildWhichIsA("BasePart")
+		return prim and prim.Position
 	end
+	if p:IsA("Attachment") then return p.WorldPosition end
+	local part = p:FindFirstChildWhichIsA("BasePart", true)
+	return part and part.Position
+end
 
-	instaGrabConn = task.spawn(function()
-		while instaGrabEnabled do
-
-			local prompt = findNearestStealPrompt()
-
-			if prompt then
-				pcall(function()
-
-					prompt.HoldDuration = 0
-					prompt.MaxActivationDistance = 9e9
-					prompt.RequiresLineOfSight = false
-					prompt.Enabled = true
-
-					fireproximityprompt(prompt, 9e9, 0)
-
-				end)
+task.spawn(function()
+	while task.wait(0.08) do
+		if _G.IsGrabbing then continue end
+		
+		local root = rootPart
+		if not root then continue end
+		
+		local plots = Workspace:FindFirstChild("Plots")
+		if not plots then continue end
+		
+		local nearest = nil
+		local minDist = math.huge
+		local myPos = root.Position
+		
+		for _, plot in ipairs(plots:GetChildren()) do
+			for _, obj in ipairs(plot:GetDescendants()) do
+				if obj:IsA("ProximityPrompt") and obj.Enabled and obj.ActionText == "Steal" then
+					
+					local pos = getPos(obj)
+					if pos then
+						local dist = (myPos - pos).Magnitude
+						
+						if dist <= obj.MaxActivationDistance and dist < minDist then
+							minDist = dist
+							nearest = obj
+						end
+					end
+					
+				end
 			end
-
-			task.wait(0.003)
 		end
-
-		instaGrabConn = nil
-	end)
-end
-			task.wait(0.01)
+		
+		if nearest then
+			_G.IsGrabbing = true
+			
+			pcall(function()
+				fireproximityprompt(nearest, 1000)
+			end)
+			
+			task.spawn(function()
+				pcall(function()
+					nearest:InputHoldBegin()
+					task.wait(0.12)
+					nearest:InputHoldEnd()
+				end)
+				
+				task.wait(1.4)
+				_G.IsGrabbing = false
+			end)
+			
 		end
-
-		instaGrabConn = nil
-	end)
-end
-
-local function stopInstaGrab()
-	instaGrabEnabled = false
-	instaGrabConn = nil
-end
-
+	end
+end)
 local SlapList = {
 	"Bat","Slap","Iron Slap","Gold Slap","Diamond Slap",
 	"Emerald Slap","Ruby Slap","Dark Matter Slap","Flame Slap",
