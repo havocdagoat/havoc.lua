@@ -419,7 +419,6 @@ local function startInstaGrab()
 		instaGrabConn = nil
 	end)
 end
-
 			task.wait(0.01)
 		end
 
