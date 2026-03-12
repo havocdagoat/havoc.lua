@@ -397,17 +397,28 @@ local function startInstaGrab()
 
 	instaGrabConn = task.spawn(function()
 		while instaGrabEnabled do
+
 			local prompt = findNearestStealPrompt()
 
 			if prompt then
 				pcall(function()
-					prompt.HoldDuration = 0.2
+
+					prompt.HoldDuration = 0
 					prompt.MaxActivationDistance = 9e9
 					prompt.RequiresLineOfSight = false
+					prompt.Enabled = true
 
-					fireproximityprompt(prompt, 0)
+					fireproximityprompt(prompt, 9e9, 0)
+
 				end)
 			end
+
+			task.wait(0.003)
+		end
+
+		instaGrabConn = nil
+	end)
+end
 
 			task.wait(0.01)
 		end
