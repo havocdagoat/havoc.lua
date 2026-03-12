@@ -345,7 +345,7 @@ Players.PlayerAdded:Connect(function(plr) task.spawn(addESP, plr) end)
 Players.PlayerRemoving:Connect(function(plr) removeESP(plr) end)
 
 local INSTA_COOLDOWN = 0.2
-local INSTA_HOLD = 0.5
+local INSTA_HOLD = 0.2
 
 local function getPromptPart(prompt)
 	local parent = prompt.Parent
@@ -401,7 +401,7 @@ local function startInstaGrab()
 
 			if prompt then
 				pcall(function()
-					prompt.HoldDuration = 0
+					prompt.HoldDuration = 0.2
 					prompt.MaxActivationDistance = 9e9
 					prompt.RequiresLineOfSight = false
 
