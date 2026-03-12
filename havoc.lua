@@ -1279,7 +1279,19 @@ targetPlayerSwitch.MouseButton1Click:Connect(function()
 	targetPlayerEnabled = not targetPlayerEnabled; updateTargetPlayerUI()
 	if targetPlayerEnabled then startTargetPlayer() else stopTargetPlayer() end
 end)
+havocABSwitch.MouseButton1Click:Connect(function()
 
+	havocABEnabled = not havocABEnabled
+
+	if havocABEnabled then
+		startHavocAB()
+	else
+		stopHavocAB()
+	end
+
+	setToggleVisual(havocABSwitch, havocABKnob, havocABEnabled)
+
+end)
 instaBlockBtn.MouseButton1Click:Connect(function()
 	instaBlockEnabled = not instaBlockEnabled
 	updateInstaBlockUI()
