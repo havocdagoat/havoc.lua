@@ -33,9 +33,6 @@ local instaGrabEnabled = false
 local xrayEnabled = false
 local autoWalkEnabled = false
 local targetPlayerEnabled = false
-local instaBlockEnabled = false lse
-local instaBlockEnabled = false
-local targetPlayerEnabled = false
 local instaBlockEnabled = false
 local AutoLeftEnabled = false
 local AutoRightEnabled = false
@@ -469,46 +466,6 @@ local function findNearestEnemy()
 	return nearest, nearestDist, nearestTorso
 end
 
-		local c = player.Character
-		if not c then return end
-
-		local hrp = c:FindFirstChild("HumanoidRootPart")
-		local hum = c:FindFirstChildOfClass("Humanoid")
-
-		if not hrp or not hum then return end
-
-		local bat = findBat()
-
-		if bat and bat.Parent ~= c then
-			pcall(function()
-				hum:EquipTool(bat)
-			end)
-		end
-
-		local target, dist, torso = findNearestEnemy()
-
-		if target and dist and dist < 35 then
-
-			local look = Vector3.new(target.Position.X, hrp.Position.Y, target.Position.Z)
-
-			hrp.CFrame = CFrame.lookAt(hrp.Position, look)
-
-			if bat then
-				pcall(function()
-					bat:Activate()
-				end)
-			end
-
-		end
-	end)
-end
-
-local function stopHavocAB()
-	if havocABConn then
-		havocABConn:Disconnect()
-		havocABConn = nil
-	end
-end
 local function startTargetPlayer()
 	if targetPlayerConn then return end
 	targetPlayerConn = RunService.Heartbeat:Connect(function()
@@ -1038,7 +995,7 @@ UserInputService.InputBegan:Connect(function(input, gp)
 	local b = listeningBind; listeningBind = nil
 	TweenService:Create(b.frame, TweenInfo.new(0.15), {BackgroundColor3 = theme.bindIdle}):Play()
 	b.label.Text = input.KeyCode.Name
-	b.label.TextColor3 = Color3.fromRGB(200,150,255)if input.KeyCode == Enum.KeyCode.H then
+	b.label.TextColor3 = Color3.fromRGB(200,150,255)
 end)
 
 local function makeToggleRow(parent, labelText, bindKey, yPos)
