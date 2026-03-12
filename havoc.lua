@@ -1099,7 +1099,7 @@ local instaGrabSwitch,    instaGrabKnob    = makeToggleRow(page, "Insta Grab",  
 local xraySwitch,         xrayKnob         = makeToggleRow(page, "XRay + Optimizer", "XRAY",         128)
 local autoWalkSwitch,     autoWalkKnob     = makeToggleRow(page, "Auto Walk",        "AUTOWALK",     168)
 local targetPlayerSwitch, targetPlayerKnob = makeToggleRow(page, "Target Player",    "TARGETPLAYER", 208)
-local havocABSwitch, havocABKnob = makeToggleRow(page, "Havoc AB", "H", 238)
+
 local delayRow = Instance.new("Frame", page)
 delayRow.Size = UDim2.new(1,0,0,22); delayRow.Position = UDim2.new(0,0,0,248)
 delayRow.BackgroundTransparency = 1
