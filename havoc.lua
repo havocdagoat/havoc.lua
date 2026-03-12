@@ -33,10 +33,14 @@ local instaGrabEnabled = false
 local xrayEnabled = false
 local autoWalkEnabled = false
 local targetPlayerEnabled = false
+local instaBlockEnabled = false lse
 local instaBlockEnabled = false
+-- HAVOC AB (Auto Bat + Aimbot)
 local havocABEnabled = false
 local autoBatEnabled = false
 local havocABConn = nil
+local targetPlayerEnabled = false
+local instaBlockEnabled = false
 local AutoLeftEnabled = false
 local AutoRightEnabled = false
 local isOnPath = false
