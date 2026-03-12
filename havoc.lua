@@ -1290,7 +1290,6 @@ havocABSwitch.MouseButton1Click:Connect(function()
 	end
 
 	setToggleVisual(havocABSwitch, havocABKnob, havocABEnabled)
-
 end)
 instaBlockBtn.MouseButton1Click:Connect(function()
 	instaBlockEnabled = not instaBlockEnabled
