@@ -1050,7 +1050,6 @@ UserInputService.InputBegan:Connect(function(input, gp)
 	TweenService:Create(b.frame, TweenInfo.new(0.15), {BackgroundColor3 = theme.bindIdle}):Play()
 	b.label.Text = input.KeyCode.Name
 	b.label.TextColor3 = Color3.fromRGB(200,150,255)if input.KeyCode == Enum.KeyCode.H then
-
 end)
 
 local function makeToggleRow(parent, labelText, bindKey, yPos)
