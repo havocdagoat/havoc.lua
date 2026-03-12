@@ -472,13 +472,6 @@ local function findNearestEnemy()
 	end
 	return nearest, nearestDist, nearestTorso
 end
--- HAVOC AB SYSTEM
-local function startHavocAB()
-	if havocABConn then return end
-
-	havocABConn = RunService.Heartbeat:Connect(function()
-
-		if not havocABEnabled then return end
 
 		local c = player.Character
 		if not c then return end
