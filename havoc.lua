@@ -1773,6 +1773,7 @@ task.spawn(function()
     if Enabled.Float              then startFloat()              end
     if Enabled.AutoWalkEnabled    then AutoWalkEnabled=true; startAutoWalk()   end
     if Enabled.AutoRightEnabled   then AutoRightEnabled=true; startAutoRight() end
+    if Enabled.AutoLeftEnabled then AutoLeftEnabled=true; startAutoLeft() end
     if Enabled.FullAutoDuel       then startFullAutoDuel() end
     if Enabled.Aimbot and not abActive then abToggle() end
 end)
