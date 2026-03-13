@@ -11,8 +11,8 @@ local CoreGui = game:GetService("CoreGui")
 
 local player = Players.LocalPlayer
 
-local VELOCITY_SPEED = 58.1
-local STEAL_SPEED = 29.3
+local VELOCITY_SPEED = 61
+local STEAL_SPEED = 30
 
 local POSITION_L1 = Vector3.new(-476.48, -6.28, 92.73)
 local POSITION_L2 = Vector3.new(-483.12, -4.95, 94.80)
@@ -396,7 +396,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local allAnimalsCache = {}
 local IsStealing = false
-local AUTO_STEAL_PROX_RADIUS = 7
+local AUTO_STEAL_PROX_RADIUS = 9
 
 -- Get player root part
 local function getHRP()
@@ -454,7 +454,7 @@ local function executeSteal(prompt)
         task.spawn(c.Function)
     end
 
-    task.delay(0.3,function()
+    task.delay(0.2,function()
         IsStealing = false
     end)
 end
@@ -485,11 +485,11 @@ RunService.Heartbeat:Connect(function()
     end
 end)
 
--- Rescan plots every 5 seconds
+-- Rescan plots every 1 second
 task.spawn(function()
     while true do
         scanPlots()
-        task.wait(5)
+        task.wait(1)
     end
 end)
 
