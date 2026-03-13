@@ -228,9 +228,7 @@ end
 
 local AutoWalkEnabled  = false
 local AutoRightEnabled = false
-local onAutoRightDone  = nil
-local onAutoLeftDone   = nil
-
+local AutoLeftEnabled  = false
 RunService.Heartbeat:Connect(function()
     if Enabled.SpinBot and spinBAV then
         spinBAV.AngularVelocity = Player:GetAttribute("Stealing") and Vector3.new(0,0,0) or Vector3.new(0,Values.SpinSpeed,0)
