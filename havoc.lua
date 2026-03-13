@@ -553,7 +553,12 @@ local function stopAutoWalk()
     local c=Player.Character if c then local hum=c:FindFirstChildOfClass("Humanoid") if hum then hum:Move(Vector3.zero,false) end end
 end
 local function startAutoLeft()
-
+local function stopAutoLeft()
+    if autoLeftConnection then
+        autoLeftConnection:Disconnect()
+        autoLeftConnection = nil
+    end
+end
     if autoLeftConnection then autoLeftConnection:Disconnect() end
     autoLeftPhase = 1
 
