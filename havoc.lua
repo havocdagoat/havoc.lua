@@ -387,90 +387,113 @@ local function triggerPrompt(prompt)
 		end)
 	end
 end
-
-local instaGrabConn = nil
-
--- AUTO GRAB (GUI REMOVED)
+-- AUTO STEAL SOURCE (No GUI)
 
 local Players = game:GetService("Players")
-local Workspace = game:GetService("Workspace")
+local RunService = game:GetService("RunService")
 
-local player = Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local rootPart = character:WaitForChild("HumanoidRootPart")
+local LocalPlayer = Players.LocalPlayer
 
-player.CharacterAdded:Connect(function(char)
-	character = char
-	rootPart = char:WaitForChild("HumanoidRootPart")
-end)
+local allAnimalsCache = {}
+local IsStealing = false
+local AUTO_STEAL_PROX_RADIUS = 7
 
-_G.IsGrabbing = false
-
-local function getPos(prompt)
-	local p = prompt.Parent
-	if p:IsA("BasePart") then return p.Position end
-	if p:IsA("Model") then
-		local prim = p.PrimaryPart or p:FindFirstChildWhichIsA("BasePart")
-		return prim and prim.Position
-	end
-	if p:IsA("Attachment") then return p.WorldPosition end
-	local part = p:FindFirstChildWhichIsA("BasePart", true)
-	return part and part.Position
+-- Get player root part
+local function getHRP()
+    local char = LocalPlayer.Character
+    return char and (char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("UpperTorso"))
 end
 
-task.spawn(function()
-	while task.wait(0.08) do
-		if _G.IsGrabbing then continue end
-		
-		local root = rootPart
-		if not root then continue end
-		
-		local plots = Workspace:FindFirstChild("Plots")
-		if not plots then continue end
-		
-		local nearest = nil
-		local minDist = math.huge
-		local myPos = root.Position
-		
-		for _, plot in ipairs(plots:GetChildren()) do
-			for _, obj in ipairs(plot:GetDescendants()) do
-				if obj:IsA("ProximityPrompt") and obj.Enabled and obj.ActionText == "Steal" then
-					
-					local pos = getPos(obj)
-					if pos then
-						local dist = (myPos - pos).Magnitude
-						
-						if dist <= obj.MaxActivationDistance and dist < minDist then
-							minDist = dist
-							nearest = obj
-						end
-					end
-					
-				end
-			end
-		end
-		
-		if nearest then
-			_G.IsGrabbing = true
-			
-			pcall(function()
-				fireproximityprompt(nearest, 1000)
-			end)
-			
-			task.spawn(function()
-				pcall(function()
-					nearest:InputHoldBegin()
-					task.wait(0.12)
-					nearest:InputHoldEnd()
-				end)
-				
-				task.wait(1.4)
-				_G.IsGrabbing = false
-			end)
-			
-		end
-	end
+-- Check if plot is your base
+local function isMyBase(plotName)
+    local plot = workspace.Plots:FindFirstChild(plotName)
+    local sign = plot and plot:FindFirstChild("PlotSign")
+    local yourBase = sign and sign:FindFirstChild("YourBase")
+    return yourBase and yourBase:IsA("BillboardGui") and yourBase.Enabled == true
+end
+
+-- Scan all plots for animals
+local function scanPlots()
+    allAnimalsCache = {}
+
+    local plots = workspace:FindFirstChild("Plots")
+    if not plots then return end
+
+    for _, plot in ipairs(plots:GetChildren()) do
+        if not isMyBase(plot.Name) then
+            local podiums = plot:FindFirstChild("AnimalPodiums")
+
+            if podiums then
+                for _, podium in ipairs(podiums:GetChildren()) do
+                    if podium:IsA("Model") and podium:FindFirstChild("Base") then
+                        table.insert(allAnimalsCache,{
+                            plot = plot.Name,
+                            slot = podium.Name,
+                            worldPosition = podium:GetPivot().Position
+                        })
+                    end
+                end
+            end
+        end
+    end
+end
+
+-- Execute steal
+local function executeSteal(prompt)
+    if IsStealing then return end
+    IsStealing = true
+
+    local holdConns = getconnections(prompt.PromptButtonHoldBegan)
+    local trigConns = getconnections(prompt.Triggered)
+
+    for _,c in ipairs(holdConns) do
+        task.spawn(c.Function)
+    end
+
+    for _,c in ipairs(trigConns) do
+        task.spawn(c.Function)
+    end
+
+    task.delay(0.3,function()
+        IsStealing = false
+    end)
+end
+
+-- Main auto steal loop
+RunService.Heartbeat:Connect(function()
+    if IsStealing then return end
+
+    local hrp = getHRP()
+    if not hrp then return end
+
+    for _,animal in ipairs(allAnimalsCache) do
+        if (hrp.Position - animal.worldPosition).Magnitude <= AUTO_STEAL_PROX_RADIUS then
+
+            local plot = workspace.Plots:FindFirstChild(animal.plot)
+            local podium = plot and plot.AnimalPodiums:FindFirstChild(animal.slot)
+            local attach = podium and podium.Base.Spawn:FindFirstChild("PromptAttachment")
+
+            if attach then
+                local p = attach:FindFirstChildOfClass("ProximityPrompt")
+                if p then
+                    task.spawn(executeSteal,p)
+                    break
+                end
+            end
+
+        end
+    end
 end)
+
+-- Rescan plots every 5 seconds
+task.spawn(function()
+    while true do
+        scanPlots()
+        task.wait(5)
+    end
+end)
+
+scanPlots()
 local SlapList = {
 	"Bat","Slap","Iron Slap","Gold Slap","Diamond Slap",
 	"Emerald Slap","Ruby Slap","Dark Matter Slap","Flame Slap",
