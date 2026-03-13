@@ -60,7 +60,18 @@ local Values = {
     FOV                  = 70,
     FloatHeight          = 8,
 }
+-- AUTO LEFT / RIGHT POSITIONS
+local POSITION_L1 = Vector3.new(-476.48, -6.28, 92.73)
+local POSITION_L2 = Vector3.new(-483.12, -4.95, 94.80)
 
+local POSITION_R1 = Vector3.new(-476.16, -6.52, 25.62)
+local POSITION_R2 = Vector3.new(-483.04, -5.09, 23.14)
+
+local autoLeftPhase = 1
+local autoRightPhase = 1
+
+local autoLeftConnection = nil
+local autoRightConnection = nil
 local KEYBINDS = {
     SPEED       = Enum.KeyCode.V,
     SPIN        = Enum.KeyCode.N,
