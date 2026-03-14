@@ -1,3 +1,4 @@
+
 -- leaked by https://discord.gg/WfTDsBPR9n join for more sources
 
 repeat task.wait() until game:IsLoaded()
@@ -11,7 +12,23 @@ local Lighting          = game:GetService("Lighting")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local HttpService       = game:GetService("HttpService")
 local Player            = Players.LocalPlayer
+-- AUTO PLAY POSITIONS
 
+local A1_P1 = Vector3.new(-472.59,-7.30,94.43)
+local A1_P2 = Vector3.new(-484.55,-5.33,95.05)
+local A1_P3 = Vector3.new(-472.59,-7.30,94.43)
+local A1_P4 = Vector3.new(-471.25,-6.83,7.08)
+
+local B1 = Vector3.new(-474.02,-7.30,25.55)
+local B2 = Vector3.new(-484.92,-5.13,24.53)
+local B3 = Vector3.new(-474.02,-7.30,25.55)
+local B4 = Vector3.new(-470.93,-6.83,113.38)
+
+local SPEED_IDA = 56
+local SPEED_VOLTA = 29
+
+local auto1 = false
+local auto2 = false
 local function waitForCharacter()
     local char = Player.Character
     if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChildOfClass("Humanoid") then return char end
@@ -24,7 +41,7 @@ if not getgenv then getgenv = function() return _G end end
 -- ============================================================
 -- STATE
 -- ============================================================
-local ConfigFileName = "HAVOCHUB_DUELS_Config.json"
+local ConfigFileName = "HAVOC_HUB_DUELS_Config.json"
 
 local Enabled = {
     SpeedBoost         = false,
@@ -63,9 +80,11 @@ local Values = {
 -- AUTO LEFT / RIGHT POSITIONS
 local POSITION_L1 = Vector3.new(-476.48, -6.28, 92.73)
 local POSITION_L2 = Vector3.new(-483.12, -4.95, 94.80)
+local POSITION_L3 = Vector3.new(-470, -6, 95) -- exit base
 
 local POSITION_R1 = Vector3.new(-476.16, -6.52, 25.62)
 local POSITION_R2 = Vector3.new(-483.04, -5.09, 23.14)
+local POSITION_R3 = Vector3.new(-470, -6, 22) -- exit base
 
 local autoLeftPhase = 1
 local autoRightPhase = 1
@@ -572,14 +591,16 @@ end
 
         if not h or not hum then return end
 
-        local target = autoLeftPhase == 1 and POSITION_L1 or POSITION_L2
+        local target =     autoLeftPhase == 1 and POSITION_L1 or     autoLeftPhase == 2 and POSITION_L2 or     POSITION_L3
 
         local dist = (Vector3.new(target.X, h.Position.Y, target.Z) - h.Position).Magnitude
 
         if dist < 1.5 then
-            if autoLeftPhase == 1 then
-                autoLeftPhase = 2
-            else
+           if autoLeftPhase == 1 then
+    autoLeftPhase = 2
+elseif autoLeftPhase == 2 then
+    autoLeftPhase = 3
+else
                 hum:Move(Vector3.zero,false)
                 h.AssemblyLinearVelocity = Vector3.new(0,0,0)
 
@@ -616,7 +637,7 @@ local function startAutoRight()
         local c=Player.Character if not c then return end
         local h=c:FindFirstChild("HumanoidRootPart"); local hum=c:FindFirstChildOfClass("Humanoid")
         if not h or not hum then return end
-        local target = autoRightPhase==1 and POSITION_R1 or POSITION_R2
+        local target =     autoRightPhase == 1 and POSITION_R1 or     autoRightPhase == 2 and POSITION_R2 or     POSITION_R3
         local dist = (Vector3.new(target.X,h.Position.Y,target.Z)-h.Position).Magnitude
         if dist < 1 then
             if autoRightPhase==1 then autoRightPhase=2; return end
@@ -1052,17 +1073,17 @@ local function onTap(btn, cb)
 end
 
 local C = {
-    bg         = Color3.fromRGB(14,14,14),
-    bgRow      = Color3.fromRGB(24,24,24),
-    white      = Color3.fromRGB(255,255,255),
-    dim        = Color3.fromRGB(150,150,150),
-    muted      = Color3.fromRGB(85,85,85),
-    off        = Color3.fromRGB(48,48,48),
-    border     = Color3.fromRGB(65,65,65),
-    danger     = Color3.fromRGB(220,50,50),
-    dangerDark = Color3.fromRGB(120,22,22),
-    badge      = Color3.fromRGB(40,40,40),
-    badgeActive= Color3.fromRGB(75,75,75),
+    bg         = Color3.fromRGB(18,12,40),   -- dark purple background
+    bgRow      = Color3.fromRGB(28,18,60),   -- row color
+    white      = Color3.fromRGB(140,170,255), -- blue text
+    dim        = Color3.fromRGB(120,120,200),
+    muted      = Color3.fromRGB(90,70,160),
+    off        = Color3.fromRGB(40,30,90),
+    border     = Color3.fromRGB(120,90,255), -- purple border
+    danger     = Color3.fromRGB(255,80,120),
+    dangerDark = Color3.fromRGB(120,30,80),
+    badge      = Color3.fromRGB(50,40,120),
+    badgeActive= Color3.fromRGB(120,90,255),
 }
 
 local WIN_W = math.floor(360*GS)
@@ -1267,7 +1288,7 @@ local function createToggle(order, labelTxt, enabledKey, callback, _unused, keyb
     -- Toggle pill (ZIndex 5)
     local pill = Instance.new("Frame", row)
     pill.Size=UDim2.new(0,PW,0,PH); pill.Position=UDim2.new(1,-(PW+math.floor(8*GS)),0.5,-PH/2)
-    pill.BackgroundColor3=isOn and C.white or C.off; pill.BorderSizePixel=0; pill.ZIndex=5
+    pill.BackgroundColor3=isOn and Color3.fromRGB(120,90,255) or C.off; pill.BorderSizePixel=0; pill.ZIndex=5
     rc(pill, PH/2); st(pill, 1.5, C.dim, 0.4)
 
     local KW = math.floor(16*GS)
