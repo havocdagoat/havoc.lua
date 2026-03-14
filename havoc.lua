@@ -574,7 +574,7 @@ end
 
         if not h or not hum then return end
 
-        local target = autoLeftPhase == 1 and POSITION_L1 or POSITION_L2
+        local target =     autoLeftPhase == 1 and POSITION_L1 or     autoLeftPhase == 2 and POSITION_L2 or     POSITION_L3
 
         local dist = (Vector3.new(target.X, h.Position.Y, target.Z) - h.Position).Magnitude
 
