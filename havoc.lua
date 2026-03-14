@@ -1904,7 +1904,10 @@ repeat task.wait() until game:IsLoaded()
 
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
-
+local function hrp()
+    local c = game.Players.LocalPlayer.Character
+    return c and c:FindFirstChild("HumanoidRootPart")
+end
 -- GUI
 local gui = Instance.new("ScreenGui")
 gui.Name = "MarcaGui"
