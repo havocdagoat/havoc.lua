@@ -1925,7 +1925,23 @@ local function go(pos,speed,cond)
 
         task.wait()
     end
+auto1 = true
 
+task.spawn(function()
+
+    go(A1_P1,SPEED_IDA,function() return auto1 end)
+
+    go(A1_P2,SPEED_IDA,function() return auto1 end)
+    instaGrab = true
+
+    go(A1_P3,SPEED_VOLTA,function() return auto1 end)
+    instaGrab = false
+
+    go(A1_P4,SPEED_VOLTA,function() return auto1 end)
+
+    auto1 = false
+
+end)
 end
 -- GUI
 local gui = Instance.new("ScreenGui")
