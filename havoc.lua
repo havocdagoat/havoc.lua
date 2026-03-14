@@ -1908,6 +1908,25 @@ local function hrp()
     local c = game.Players.LocalPlayer.Character
     return c and c:FindFirstChild("HumanoidRootPart")
 end
+local function go(pos,speed,cond)
+
+    local r = hrp()
+    if not r then return end
+
+    while cond() and (r.Position - pos).Magnitude > 1 do
+
+        local dir = (pos - r.Position).Unit
+
+        r.AssemblyLinearVelocity = Vector3.new(
+            dir.X * speed,
+            r.AssemblyLinearVelocity.Y,
+            dir.Z * speed
+        )
+
+        task.wait()
+    end
+
+end
 -- GUI
 local gui = Instance.new("ScreenGui")
 gui.Name = "MarcaGui"
