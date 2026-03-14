@@ -63,9 +63,11 @@ local Values = {
 -- AUTO LEFT / RIGHT POSITIONS
 local POSITION_L1 = Vector3.new(-476.48, -6.28, 92.73)
 local POSITION_L2 = Vector3.new(-483.12, -4.95, 94.80)
+local POSITION_L3 = Vector3.new(-470, -6, 95) -- exit base
 
 local POSITION_R1 = Vector3.new(-476.16, -6.52, 25.62)
 local POSITION_R2 = Vector3.new(-483.04, -5.09, 23.14)
+local POSITION_R3 = Vector3.new(-470, -6, 22) -- exit base
 
 local autoLeftPhase = 1
 local autoRightPhase = 1
