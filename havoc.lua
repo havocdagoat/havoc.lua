@@ -1267,7 +1267,7 @@ local function createToggle(order, labelTxt, enabledKey, callback, _unused, keyb
     -- Toggle pill (ZIndex 5)
     local pill = Instance.new("Frame", row)
     pill.Size=UDim2.new(0,PW,0,PH); pill.Position=UDim2.new(1,-(PW+math.floor(8*GS)),0.5,-PH/2)
-    pill.BackgroundColor3=isOn and C.white or C.off; pill.BorderSizePixel=0; pill.ZIndex=5
+    pill.BackgroundColor3=isOn and Color3.fromRGB(120,90,255) or C.off; pill.BorderSizePixel=0; pill.ZIndex=5
     rc(pill, PH/2); st(pill, 1.5, C.dim, 0.4)
 
     local KW = math.floor(16*GS)
