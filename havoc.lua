@@ -620,7 +620,7 @@ local function startAutoRight()
         local c=Player.Character if not c then return end
         local h=c:FindFirstChild("HumanoidRootPart"); local hum=c:FindFirstChildOfClass("Humanoid")
         if not h or not hum then return end
-        local target = autoRightPhase==1 and POSITION_R1 or POSITION_R2
+        local target =     autoRightPhase == 1 and POSITION_R1 or     autoRightPhase == 2 and POSITION_R2 or     POSITION_R3
         local dist = (Vector3.new(target.X,h.Position.Y,target.Z)-h.Position).Magnitude
         if dist < 1 then
             if autoRightPhase==1 then autoRightPhase=2; return end
