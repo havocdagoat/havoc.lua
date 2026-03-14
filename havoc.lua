@@ -24,7 +24,7 @@ if not getgenv then getgenv = function() return _G end end
 -- ============================================================
 -- STATE
 -- ============================================================
-local ConfigFileName = "HAVOCHUB_DUELS_Config.json"
+local ConfigFileName = "HAVOC_HUB_DUELS_Config.json"
 
 local Enabled = {
     SpeedBoost         = false,
