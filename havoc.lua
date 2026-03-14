@@ -11,7 +11,23 @@ local Lighting          = game:GetService("Lighting")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local HttpService       = game:GetService("HttpService")
 local Player            = Players.LocalPlayer
+-- AUTO PLAY POSITIONS
 
+local A1_P1 = Vector3.new(-472.59,-7.30,94.43)
+local A1_P2 = Vector3.new(-484.55,-5.33,95.05)
+local A1_P3 = Vector3.new(-472.59,-7.30,94.43)
+local A1_P4 = Vector3.new(-471.25,-6.83,7.08)
+
+local B1 = Vector3.new(-474.02,-7.30,25.55)
+local B2 = Vector3.new(-484.92,-5.13,24.53)
+local B3 = Vector3.new(-474.02,-7.30,25.55)
+local B4 = Vector3.new(-470.93,-6.83,113.38)
+
+local SPEED_IDA = 56
+local SPEED_VOLTA = 29
+
+local auto1 = false
+local auto2 = false
 local function waitForCharacter()
     local char = Player.Character
     if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChildOfClass("Humanoid") then return char end
