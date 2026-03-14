@@ -1922,7 +1922,7 @@ gradient.Color = ColorSequence.new{
 
 -- Função de chat
 button.MouseButton1Click:Connect(function()
-    game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("/fj8vNed6")
+    game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("/havoc")
 end)
 
 local player = game.Players.LocalPlayer
