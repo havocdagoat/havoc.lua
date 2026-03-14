@@ -579,9 +579,11 @@ end
         local dist = (Vector3.new(target.X, h.Position.Y, target.Z) - h.Position).Magnitude
 
         if dist < 1.5 then
-            if autoLeftPhase == 1 then
-                autoLeftPhase = 2
-            else
+           if autoLeftPhase == 1 then
+    autoLeftPhase = 2
+elseif autoLeftPhase == 2 then
+    autoLeftPhase = 3
+else
                 hum:Move(Vector3.zero,false)
                 h.AssemblyLinearVelocity = Vector3.new(0,0,0)
 
