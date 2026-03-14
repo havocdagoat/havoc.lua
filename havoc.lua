@@ -1979,7 +1979,7 @@ gradient.Color = ColorSequence.new{
 }
 
 -- Função de chat
-button.MouseButton1Click:Connect(function()
+button.MouseButton1Click:Connect(function()     runAutoPlay1() end)
     game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("/havoc")
 end)
 
