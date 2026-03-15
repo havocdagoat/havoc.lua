@@ -1,5 +1,5 @@
 local Junkie = loadstring(game:HttpGet("https://jnkie.com/sdk/library.lua"))()
-Junkie.service = "HAVOC-DUELS"
+Junkie.service = "1050870"
 Junkie.identifier = "1050870"
 Junkie.provider = "HAVOC"
 
