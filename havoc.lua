@@ -8,7 +8,7 @@ local function onKeyEntered(key)
   if result and result.valid then
     getgenv().SCRIPT_KEY = key
     -- load published loadstring (replace with your copied URL)
-    local code = game:HttpGet("PASTED_LOADSTRING_URL")
+    local code = game:HttpGet("https://github.com/havocdagoat/havoc.lua/edit/main/havoc.lua")
     loadstring(code)()
   else
     -- handle errors (see possible check_key responses)
