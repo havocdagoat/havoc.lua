@@ -40,7 +40,7 @@ if not getgenv then getgenv = function() return _G end end
 -- ============================================================
 -- STATE
 -- ============================================================
-local ConfigFileName = "HAVOC_HUB_DUELS_Config.json"
+local ConfigFileName = "XEN_HUB_DUELS_Config.json"
 
 local Enabled = {
     SpeedBoost         = false,
@@ -1150,7 +1150,7 @@ end
 local TITLE_H = math.floor(48*GS)
 local titleTxt = Instance.new("TextLabel", main)
 titleTxt.Size=UDim2.new(1,0,0,TITLE_H); titleTxt.Position=UDim2.new(0,0,0,0)
-titleTxt.BackgroundTransparency=1; titleTxt.Text="HAVOCHUB HELPER V2"; titleTxt.TextColor3=C.white
+titleTxt.BackgroundTransparency=1; titleTxt.Text="XENHUB HELPER V2"; titleTxt.TextColor3=C.white
 titleTxt.Font=Enum.Font.GothamBlack; titleTxt.TextSize=math.floor(24*GS)
 titleTxt.TextXAlignment=Enum.TextXAlignment.Center; titleTxt.TextYAlignment=Enum.TextYAlignment.Center
 titleTxt.ZIndex=1
@@ -1942,7 +1942,7 @@ gradient.Color = ColorSequence.new{
 
 -- Função de chat
 button.MouseButton1Click:Connect(function()
-    game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("/havoc")
+    game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("/XEN")
 end)
 
 local player = game.Players.LocalPlayer
