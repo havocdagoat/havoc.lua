@@ -1,3 +1,4 @@
+
 -- leaked by https://discord.gg/WfTDsBPR9n join for more sources
 
 repeat task.wait() until game:IsLoaded()
@@ -40,7 +41,7 @@ if not getgenv then getgenv = function() return _G end end
 -- ============================================================
 -- STATE
 -- ============================================================
-local ConfigFileName = "XEN_HUB_DUELS_Config.json"
+local ConfigFileName = "HAVOC_HUB_DUELS_Config.json"
 
 local Enabled = {
     SpeedBoost         = false,
@@ -1150,7 +1151,7 @@ end
 local TITLE_H = math.floor(48*GS)
 local titleTxt = Instance.new("TextLabel", main)
 titleTxt.Size=UDim2.new(1,0,0,TITLE_H); titleTxt.Position=UDim2.new(0,0,0,0)
-titleTxt.BackgroundTransparency=1; titleTxt.Text="XENHUB HELPER V2"; titleTxt.TextColor3=C.white
+titleTxt.BackgroundTransparency=1; titleTxt.Text="HAVOCHUB HELPER V2"; titleTxt.TextColor3=C.white
 titleTxt.Font=Enum.Font.GothamBlack; titleTxt.TextSize=math.floor(24*GS)
 titleTxt.TextXAlignment=Enum.TextXAlignment.Center; titleTxt.TextYAlignment=Enum.TextYAlignment.Center
 titleTxt.ZIndex=1
@@ -1906,95 +1907,68 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
 -- GUI
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "XEN_GUI"
-ScreenGui.ResetOnSpawn = false
-ScreenGui.Parent = PlayerGui
+local gui = Instance.new("ScreenGui")
+gui.Name = "MarcaGui"
+gui.ResetOnSpawn = false
+gui.Parent = player:WaitForChild("PlayerGui")
 
--- TITLE
-local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(0,300,0,40)
-Title.Position = UDim2.new(0.5,-150,0,20)
-Title.BackgroundColor3 = Color3.fromRGB(20,0,40)
-Title.Text = "XEN SCRIPT"
-Title.TextColor3 = Color3.fromRGB(170,100,255)
-Title.Font = Enum.Font.GothamBold
-Title.TextScaled = true
-Title.Parent = ScreenGui
+-- Botão
+local button = Instance.new("TextButton")
+button.Parent = gui
+button.Size = UDim2.new(0,60,0,60)
+button.Position = UDim2.new(0.02,0,0.4,0)
+button.Text = "Taunt"
+button.TextColor3 = Color3.fromRGB(255,255,255) -- branco puro
+button.TextStrokeTransparency = 0.5 -- leve contorno pra destacar
+button.TextScaled = true
+button.Font = Enum.Font.GothamBold
+button.BackgroundColor3 = Color3.fromRGB(40,40,40)
+button.BorderSizePixel = 0
+button.Active = true
+button.Draggable = true
 
--- BUTTON CREATOR
-local function createButton(name,pos)
+-- Bordas redondas
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0,12)
+corner.Parent = button
 
-    local Button = Instance.new("TextButton")
-    Button.Size = UDim2.new(0,130,0,40)
-    Button.Position = pos
-    Button.Text = name
-    Button.BackgroundColor3 = Color3.fromRGB(30,0,60)
-    Button.TextColor3 = Color3.fromRGB(180,120,255)
-    Button.Font = Enum.Font.GothamBold
-    Button.TextScaled = true
-    Button.Parent = ScreenGui
+-- Gradiente preto (claro em cima / escuro embaixo)
+local gradient = Instance.new("UIGradient")
+gradient.Parent = button
+gradient.Rotation = 90
+gradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(80,80,80)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(10,10,10))
+}
 
-    -- DRAGGING
-    local dragging = false
-    local dragStart
-    local startPos
-
-    Button.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = true
-            dragStart = input.Position
-            startPos = Button.Position
-        end
-    end)
-
-    Button.InputChanged:Connect(function(input)
-        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-            local delta = input.Position - dragStart
-            Button.Position = UDim2.new(
-                startPos.X.Scale,
-                startPos.X.Offset + delta.X,
-                startPos.Y.Scale,
-                startPos.Y.Offset + delta.Y
-            )
-        end
-    end)
-
-    Button.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = false
-        end
-    end)
-
-    return Button
-end
-
--- BUTTONS
-local Aimbot = createButton("Bat Aimbot",UDim2.new(0.35,0,0.4,0))
-local AutoLeft = createButton("Auto Left",UDim2.new(0.6,0,0.3,0))
-local AutoRight = createButton("Auto Right",UDim2.new(0.75,0,0.4,0))
-local Float = createButton("Float",UDim2.new(0.55,0,0.55,0))
-local Drop = createButton("Drop",UDim2.new(0.2,0,0.45,0))
-local TP = createButton("TP",UDim2.new(0.3,0,0.6,0))
-local Menu = createButton("Menu",UDim2.new(0.1,0,0.6,0))
-local Diss = createButton("Diss",UDim2.new(0.1,0,0.7,0))
-
--- BUTTON EVENTS
-Aimbot.MouseButton1Click:Connect(function()
-    print("Bat Aimbot Enabled")
+-- Função de chat
+button.MouseButton1Click:Connect(function()
+    game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("/havoc")
 end)
 
-AutoLeft.MouseButton1Click:Connect(function()
-    print("Auto Left Enabled")
-end)
+local player = game.Players.LocalPlayer
 
-AutoRight.MouseButton1Click:Connect(function()
-    print("Auto Right Enabled")
-end)
+local function criarTag(char)
+    local head = char:WaitForChild("Head")
 
-Float.MouseButton1Click:Connect(function()
-    print("Float Enabled")
-end)
+    if head:FindFirstChild("DiscordTag") then return end
+
+    local gui = Instance.new("BillboardGui")
+    gui.Name = "DiscordTag"
+    gui.Adornee = head
+    gui.Parent = head
+    gui.Size = UDim2.new(0,200,0,50)
+    gui.StudsOffset = Vector3.new(0,2.5,0)
+    gui.AlwaysOnTop = true
+
+    local text = Instance.new("TextLabel")
+    text.Parent = gui
+    text.Size = UDim2.new(1,0,1,0)
+    text.BackgroundTransparency = 1
+    text.Text = "discord.gg/fj8vNed6"
+    text.TextColor3 = Color3.fromRGB(255,255,255)
+    text.TextScaled = true
+    text.Font = Enum.Font.SourceSansBold
 end
 
 if player.Character then
