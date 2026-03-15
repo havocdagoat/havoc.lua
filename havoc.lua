@@ -1,6 +1,6 @@
 local Junkie = loadstring(game:HttpGet("https://jnkie.com/sdk/library.lua"))()
 Junkie.service = "YOUR_SERVICE_SLUG_OR_ID"
-Junkie.identifier = "YOUR_IDENTIFIER_FROM_DASHBOARD"
+Junkie.identifier = "1050870"
 Junkie.provider = "HAVOC"
 
 local function onKeyEntered(key)
@@ -16,4 +16,3 @@ local function onKeyEntered(key)
   end
 end
 
--- your UI/input logic should call onKeyEntered(key)
