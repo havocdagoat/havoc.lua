@@ -1094,55 +1094,7 @@ local sg = Instance.new("ScreenGui")
 sg.Name="H_CLEAN"; sg.ResetOnSpawn=false
 sg.ZIndexBehavior=Enum.ZIndexBehavior.Sibling
 sg.Parent=Player.PlayerGui
-local function createButton(name,pos)
 
-    local Button = Instance.new("TextButton")
-    Button.Size = UDim2.new(0,130,0,40)
-    Button.Position = pos
-    Button.Text = name
-    Button.BackgroundColor3 = Color3.fromRGB(30,0,60)
-    Button.TextColor3 = Color3.fromRGB(180,120,255)
-    Button.Font = Enum.Font.GothamBold
-    Button.TextScaled = true
-    Button.Parent = sg
-
-    local dragging=false
-    local dragStart
-    local startPos
-
-    Button.InputBegan:Connect(function(input)
-        if input.UserInputType==Enum.UserInputType.MouseButton1 then
-            dragging=true
-            dragStart=input.Position
-            startPos=Button.Position
-        end
-    end)
-
-    Button.InputChanged:Connect(function(input)
-        if dragging and input.UserInputType==Enum.UserInputType.MouseMovement then
-            local delta=input.Position-dragStart
-            Button.Position=UDim2.new(
-                startPos.X.Scale,
-                startPos.X.Offset+delta.X,
-                startPos.Y.Scale,
-                startPos.Y.Offset+delta.Y
-            )
-        end
-    end)
-
-    Button.InputEnded:Connect(function(input)
-        if input.UserInputType==Enum.UserInputType.MouseButton1 then
-            dragging=false
-        end
-    end)
-
-    return Button
-end
-
-local BatAimbot = createButton("Bat Aimbot",UDim2.new(0.35,0,0.45,0))
-local AutoLeft = createButton("Auto Left",UDim2.new(0.6,0,0.35,0))
-local AutoRight = createButton("Auto Right",UDim2.new(0.75,0,0.45,0))
-local Float = createButton("Float",UDim2.new(0.55,0,0.6,0))
 local function playSound(id,vol,spd)
     pcall(function()
         local s=Instance.new("Sound",SoundService)
