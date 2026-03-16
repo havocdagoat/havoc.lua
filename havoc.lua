@@ -1087,8 +1087,7 @@ local WIN_H = math.floor(420*GS)
 local CR    = math.floor(12*GS)
 
 local sg = Instance.new("ScreenGui")
-sg.Name="SILIX_DUELS"; sg.ResetOnSpawn=false
-sg.ZIndexBehavior=Enum.ZIndexBehavior.Sibling
+sg.Name="H_CLEAN"
 sg.Parent=Player.PlayerGui
 
 local function playSound(id,vol,spd)
