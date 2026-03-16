@@ -77,15 +77,22 @@ local Values = {
     FOV                  = 70,
     FloatHeight          = 8,
 }
--- AUTO LEFT / RIGHT POSITIONS
-local POSITION_L1 = Vector3.new(-476.48, -6.28, 92.73)
-local POSITION_L2 = Vector3.new(-483.12, -4.95, 94.80)
-local POSITION_L3 = Vector3.new(-470, -6, 95) -- exit base
+-- AUTO PLAY POSITIONS
 
-local POSITION_R1 = Vector3.new(-476.16, -6.52, 25.62)
-local POSITION_R2 = Vector3.new(-483.04, -5.09, 23.14)
-local POSITION_R3 = Vector3.new(-470, -6, 22) -- exit base
+-- AUTO PLAY 1
+local A1_P1 = Vector3.new(-472.59,-7.30,94.43)
+local A1_P2 = Vector3.new(-484.55,-5.33,95.05)
+local A1_P3 = Vector3.new(-472.59,-7.30,94.43)
+local A1_P4 = Vector3.new(-471.25,-6.83,7.08)
 
+-- AUTO PLAY 2
+local B1 = Vector3.new(-474.02,-7.30,25.55)
+local B2 = Vector3.new(-484.92,-5.13,24.53)
+local B3 = Vector3.new(-474.02,-7.30,25.55)
+local B4 = Vector3.new(-470.93,-6.83,113.38)
+
+local SPEED_IDA = 56
+local SPEED_VOLTA = 29
 local autoLeftPhase = 1
 local autoRightPhase = 1
 
