@@ -576,85 +576,29 @@ local function stopAutoWalk()
     autoWalkPhase=1
     local c=Player.Character if c then local hum=c:FindFirstChildOfClass("Humanoid") if hum then hum:Move(Vector3.zero,false) end end
 end
-local function startAutoLeft()
-local function stopAutoLeft()
-    if autoLeftConnection then
-        autoLeftConnection:Disconnect()
-        autoLeftConnection = nil
-    end
+local function hrp()
+    local c = Player.Character
+    return c and c:FindFirstChild("HumanoidRootPart")
 end
-    if autoLeftConnection then autoLeftConnection:Disconnect() end
-    autoLeftPhase = 1
 
-    autoLeftConnection = RunService.Heartbeat:Connect(function()
+local function go(pos,speed)
 
-        if not AutoLeftEnabled then return end
+    local r = hrp()
+    if not r then return end
 
-        local c = Player.Character
-        if not c then return end
+    while (r.Position - pos).Magnitude > 1 do
 
-        local h = c:FindFirstChild("HumanoidRootPart")
-        local hum = c:FindFirstChildOfClass("Humanoid")
+        local dir = (pos - r.Position).Unit
 
-        if not h or not hum then return end
-
-        local target =     autoLeftPhase == 1 and POSITION_L1 or     autoLeftPhase == 2 and POSITION_L2 or     POSITION_L3
-
-        local dist = (Vector3.new(target.X, h.Position.Y, target.Z) - h.Position).Magnitude
-
-        if dist < 1.5 then
-           if autoLeftPhase == 1 then
-    autoLeftPhase = 2
-elseif autoLeftPhase == 2 then
-    autoLeftPhase = 3
-else
-                hum:Move(Vector3.zero,false)
-                h.AssemblyLinearVelocity = Vector3.new(0,0,0)
-
-                AutoLeftEnabled = false
-
-                if autoLeftConnection then
-                    autoLeftConnection:Disconnect()
-                    autoLeftConnection = nil
-                end
-
-                return
-            end
-        end
-
-        local dir = (target - h.Position)
-        local md = Vector3.new(dir.X,0,dir.Z).Unit
-
-        hum:Move(md,false)
-
-        h.AssemblyLinearVelocity = Vector3.new(
-            md.X * Values.BoostSpeed,
-            h.AssemblyLinearVelocity.Y,
-            md.Z * Values.BoostSpeed
+        r.AssemblyLinearVelocity = Vector3.new(
+            dir.X * speed,
+            r.AssemblyLinearVelocity.Y,
+            dir.Z * speed
         )
 
-    end)
-
+        task.wait()
+    end
 end
-local function startAutoRight()
-    if autoRightConnection then autoRightConnection:Disconnect() end
-    autoRightPhase=1
-    autoRightConnection = RunService.Heartbeat:Connect(function()
-        if not AutoRightEnabled then return end
-        local c=Player.Character if not c then return end
-        local h=c:FindFirstChild("HumanoidRootPart"); local hum=c:FindFirstChildOfClass("Humanoid")
-        if not h or not hum then return end
-        local target =     autoRightPhase == 1 and POSITION_R1 or     autoRightPhase == 2 and POSITION_R2 or     POSITION_R3
-        local dist = (Vector3.new(target.X,h.Position.Y,target.Z)-h.Position).Magnitude
-        if dist < 1 then
-            if autoRightPhase==1 then autoRightPhase=2; return end
-            hum:Move(Vector3.zero,false); h.AssemblyLinearVelocity=Vector3.new(0,0,0)
-            AutoRightEnabled=false; Enabled.AutoRightEnabled=false
-            if VisualSetters and VisualSetters.AutoRightEnabled then VisualSetters.AutoRightEnabled(false,true) end
-            if autoRightConnection then autoRightConnection:Disconnect(); autoRightConnection=nil end
-            if onAutoRightDone then onAutoRightDone() end
-            faceNorth(); return
-        end
         local dir=(target-h.Position); local md=Vector3.new(dir.X,0,dir.Z).Unit
         hum:Move(md,false); h.AssemblyLinearVelocity=Vector3.new(md.X*Values.BoostSpeed,h.AssemblyLinearVelocity.Y,md.Z*Values.BoostSpeed)
     end)
