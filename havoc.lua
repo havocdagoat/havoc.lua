@@ -1091,7 +1091,7 @@ local WIN_H = math.floor(420*GS)
 local CR    = math.floor(12*GS)
 
 local sg = Instance.new("ScreenGui")
-sg.Name="H_CLEAN"; sg.ResetOnSpawn=false
+sg.Name="SILIX_DUELS"; sg.ResetOnSpawn=false
 sg.ZIndexBehavior=Enum.ZIndexBehavior.Sibling
 sg.Parent=Player.PlayerGui
 
