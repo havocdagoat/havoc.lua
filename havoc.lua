@@ -1073,17 +1073,13 @@ local function onTap(btn, cb)
 end
 
 local C = {
-    bg         = Color3.fromRGB(18,12,40),   -- dark purple background
-    bgRow      = Color3.fromRGB(28,18,60),   -- row color
-    white      = Color3.fromRGB(140,170,255), -- blue text
-    dim        = Color3.fromRGB(120,120,200),
-    muted      = Color3.fromRGB(90,70,160),
-    off        = Color3.fromRGB(40,30,90),
-    border     = Color3.fromRGB(120,90,255), -- purple border
-    danger     = Color3.fromRGB(255,80,120),
-    dangerDark = Color3.fromRGB(120,30,80),
-    badge      = Color3.fromRGB(50,40,120),
-    badgeActive= Color3.fromRGB(120,90,255),
+    bg         = Color3.fromRGB(10,40,40),   -- dark teal background
+    bgRow      = Color3.fromRGB(20,70,60),   -- row color
+    white      = Color3.fromRGB(0,255,180),  -- teal text
+    dim        = Color3.fromRGB(0,200,140),
+    muted      = Color3.fromRGB(0,150,110),
+    off        = Color3.fromRGB(20,50,45),
+    border     = Color3.fromRGB(0,255,170),  -- bright teal border
 }
 
 local WIN_W = math.floor(360*GS)
