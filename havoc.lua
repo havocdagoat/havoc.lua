@@ -1073,13 +1073,17 @@ local function onTap(btn, cb)
 end
 
 local C = {
-    bg         = Color3.fromRGB(10,40,40),   -- dark teal background
-    bgRow      = Color3.fromRGB(20,70,60),   -- row color
-    white      = Color3.fromRGB(0,255,180),  -- teal text
-    dim        = Color3.fromRGB(0,200,140),
-    muted      = Color3.fromRGB(0,150,110),
-    off        = Color3.fromRGB(20,50,45),
-    border     = Color3.fromRGB(0,255,170),  -- bright teal border
+    bg         = Color3.fromRGB(18,12,40),   -- dark purple background
+    bgRow      = Color3.fromRGB(28,18,60),   -- row color
+    white      = Color3.fromRGB(140,170,255), -- blue text
+    dim        = Color3.fromRGB(120,120,200),
+    muted      = Color3.fromRGB(90,70,160),
+    off        = Color3.fromRGB(40,30,90),
+    border     = Color3.fromRGB(120,90,255), -- purple border
+    danger     = Color3.fromRGB(255,80,120),
+    dangerDark = Color3.fromRGB(120,30,80),
+    badge      = Color3.fromRGB(50,40,120),
+    badgeActive= Color3.fromRGB(120,90,255),
 }
 
 local WIN_W = math.floor(360*GS)
@@ -1087,7 +1091,8 @@ local WIN_H = math.floor(420*GS)
 local CR    = math.floor(12*GS)
 
 local sg = Instance.new("ScreenGui")
-sg.Name="H_CLEAN"
+sg.Name="H_CLEAN"; sg.ResetOnSpawn=false
+sg.ZIndexBehavior=Enum.ZIndexBehavior.Sibling
 sg.Parent=Player.PlayerGui
 
 local function playSound(id,vol,spd)
@@ -1146,7 +1151,7 @@ end
 local TITLE_H = math.floor(48*GS)
 local titleTxt = Instance.new("TextLabel", main)
 titleTxt.Size=UDim2.new(1,0,0,TITLE_H); titleTxt.Position=UDim2.new(0,0,0,0)
-titleTxt.BackgroundTransparency=1; titleTxt.Text="SILIX DUELS"; titleTxt.TextColor3=C.white
+titleTxt.BackgroundTransparency=1; titleTxt.Text="HAVOCHUB HELPER V2"; titleTxt.TextColor3=C.white
 titleTxt.Font=Enum.Font.GothamBlack; titleTxt.TextSize=math.floor(24*GS)
 titleTxt.TextXAlignment=Enum.TextXAlignment.Center; titleTxt.TextYAlignment=Enum.TextYAlignment.Center
 titleTxt.ZIndex=1
