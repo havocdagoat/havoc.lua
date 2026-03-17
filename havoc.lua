@@ -10,15 +10,15 @@ local LocalPlayer = Players.LocalPlayer
 
 -- --- CONFIG & PURPLE/BLUE THEME ---
 local COLORS = {
-    Background = Color3.fromRGB(10, 15, 35), -- Dark blue background
-    ButtonPurple = Color3.fromRGB(120, 40, 180), -- Purple
-    ButtonBlue = Color3.fromRGB(40, 80, 200), -- Blue
-    ButtonHoverPurple = Color3.fromRGB(150, 60, 220), -- Lighter purple
-    ButtonHoverBlue = Color3.fromRGB(60, 100, 240), -- Lighter blue
-    TopBarBlue = Color3.fromRGB(30, 60, 150), -- Medium blue
-    TextWhite = Color3.fromRGB(255, 255, 255),
-    StatusRed = Color3.fromRGB(255, 95, 87),
-    StatusGreen = Color3.fromRGB(40, 200, 64)
+    Background = Color3.fromRGB(5, 25, 20), -- dark teal
+    ButtonPurple = Color3.fromRGB(0, 170, 150), -- teal
+    ButtonBlue = Color3.fromRGB(0, 200, 120), -- green
+    ButtonHoverPurple = Color3.fromRGB(0, 200, 180),
+    ButtonHoverBlue = Color3.fromRGB(0, 230, 140),
+    TopBarBlue = Color3.fromRGB(0, 120, 100),
+    TextWhite = Color3.fromRGB(255,255,255),
+    StatusGreen = Color3.fromRGB(0,255,150),
+    StatusRed = Color3.fromRGB(255,80,80)
 }
 
 -- --- TP COORDINATES ---
