@@ -1,4 +1,4 @@
--- Plexhub Duel V4 
+-- silixhub Duel V4 
 
 -- Ragdoll TP
 
@@ -36,7 +36,7 @@ local hasRecovered = true -- Tracks if player stopped ragdolling since last TP
 
 -- --- UI SETUP ---
 local sg = Instance.new("ScreenGui", LocalPlayer.PlayerGui)
-sg.Name = "PlexhubRagdollTP"
+sg.Name = "silixhubRagdollTP"
 sg.ResetOnSpawn = false
 sg.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 sg.IgnoreGuiInset = true
@@ -95,7 +95,7 @@ TopCorner.CornerRadius = UDim.new(0, 18)
 
 local Title = Instance.new("TextLabel", TopBar)
 Title.Size = UDim2.new(1, 0, 1, 0)
-Title.Text = "Plexhub Ragdoll TP"
+Title.Text = "silixhub Ragdoll TP"
 Title.TextColor3 = COLORS.TextWhite
 Title.Font = Enum.Font.Bangers
 Title.TextSize = 25
@@ -248,7 +248,7 @@ LocalPlayer.CharacterAdded:Connect(function()
     rightDot.BackgroundColor3 = COLORS.StatusRed
 end)
 
-print("Plexhub Ragdoll TP Loaded.")
+print("silixhub Ragdoll TP Loaded.")
 
 
 
@@ -444,7 +444,7 @@ end
 
 -- UI Setup
 local sg = Instance.new("ScreenGui")
-sg.Name        = "PlexhubAutoDuel"
+sg.Name        = "silixhubAutoDuel"
 sg.ResetOnSpawn = false
 sg.DisplayOrder = 999
 sg.Parent       = Player.PlayerGui
@@ -505,7 +505,7 @@ local title = Instance.new("TextLabel", TopBar)
 title.Size               = UDim2.new(1, -80, 1, 0)
 title.Position            = UDim2.new(0, 15, 0, 0)
 title.BackgroundTransparency = 1
-title.Text               = "Plexhub Auto Duel"
+title.Text               = "silixhub Auto Duel"
 title.TextColor3         = COLORS.TextWhite
 title.Font               = Enum.Font.Bangers
 title.TextSize           = 24 -- Larger text
@@ -995,7 +995,7 @@ startStealLoop()
 
 -- GUI Setup
 local gui = Instance.new("ScreenGui")
-gui.Name = "PlexhubAutoSteal"
+gui.Name = "silixhubAutoSteal"
 gui.ResetOnSpawn = false
 gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 gui.Parent = CoreGui
@@ -1060,7 +1060,7 @@ local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, -80, 1, 0)
 title.Position = UDim2.new(0, 15, 0, 0)
 title.BackgroundTransparency = 1
-title.Text = "Plexhub Auto Steal"
+title.Text = "silixhub Auto Steal"
 title.TextColor3 = COLORS.TextWhite
 title.Font = Enum.Font.Bangers
 title.TextSize = 24
@@ -1522,7 +1522,7 @@ local infjump = false
 
 -- GUI Setup
 local gui = Instance.new("ScreenGui")
-gui.Name = "PlexhubDuelHelper"
+gui.Name = "silixhubDuelHelper"
 gui.ResetOnSpawn = false
 gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 gui.Parent = cg
@@ -1587,7 +1587,7 @@ local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, -70, 1, 0)
 title.Position = UDim2.new(0, 10, 0, 0)
 title.BackgroundTransparency = 1
-title.Text = "Plexhub Helper"
+title.Text = "silixhub Helper"
 title.TextColor3 = COLORS.TextWhite
 title.Font = Enum.Font.Bangers
 title.TextSize = 18 -- Slightly smaller for slimmer bar
@@ -1804,7 +1804,7 @@ end
 
 task.spawn(animate)
 
-print("Plexhub Duel Helper - Purple/Blue Theme Loaded")
+print("silixhub Duel Helper - Purple/Blue Theme Loaded")
 
 -- Auto copy Discord invite
 pcall(function()
