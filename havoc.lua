@@ -102,7 +102,7 @@ end
 -- ========== STEAL SPEED VARIABLES ==========
 local stealSpeedActive = false
 local stealSpeedConn = nil
-local STEAL_SPEED_VALUE = 29
+local STEAL_SPEED_VALUE = 31
 
 local function startStealSpeed()
     if stealSpeedConn then stealSpeedConn:Disconnect() end
