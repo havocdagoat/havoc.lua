@@ -6,7 +6,7 @@ local TweenService = game:GetService("TweenService")
 
 local player = Players.LocalPlayer
 
-Lib.Name = "NineHub_Minimal"
+Lib.Name = "silixhub_Minimal"
 Lib.Parent = game:GetService("CoreGui")
 Lib.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
