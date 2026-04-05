@@ -24,7 +24,7 @@ LFINAL=Vector3.new(-473.38,-8.40,22.34) RFINAL=Vector3.new(-476.17,-7.91,97.91)
 
 aplOn=false aprOn=false aplPhase=1 aprPhase=1 aplConn=nil aprConn=nil
 autoStealEnabled=false isStealing=false stealStartTime=nil
-autoStealConn=nil progressConn=nil STEAL_RADIUS=20 STEAL_DURATION=0.35
+autoStealConn=nil progressConn=nil STEAL_RADIUS=20 STEAL_DURATION=0.20
 antiRagdollEnabled=false
 unwalkEnabled=false unwalkConn=nil
 batAimbotEnabled=false BAT_ENGAGE_RANGE=5
