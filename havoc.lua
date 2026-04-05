@@ -9,13 +9,13 @@ local Stats = game:GetService("Stats")
 local player = Players.LocalPlayer
 local camera = workspace.CurrentCamera
 
-local ACCENT  = Color3.fromRGB(180,100,255)
-local WHITE   = Color3.fromRGB(240,240,255)
-local BG      = Color3.fromRGB(8,8,12)
-local CARD    = Color3.fromRGB(14,14,22)
-local OFF_CLR = Color3.fromRGB(35,35,50)
-local MOB_ON  = Color3.fromRGB(130,60,220)
-local MOB_OFF = Color3.fromRGB(14,10,24)
+local ACCENT  = Color3.fromRGB(255,80,140)   -- main pink/red blend
+local WHITE   = Color3.fromRGB(255,230,240)  -- soft pinkish white
+local BG      = Color3.fromRGB(20,5,10)      -- dark red background
+local CARD    = Color3.fromRGB(35,10,20)     -- panel cards
+local OFF_CLR = Color3.fromRGB(60,20,35)     -- off state (dark pink/red)
+local MOB_ON  = Color3.fromRGB(255,60,120)   -- bright pink when enabled
+local MOB_OFF = Color3.fromRGB(25,5,15)      -- dark off
 
 NORMAL_SPEED=60 SLOW_SPEED=29
 POS_L1=Vector3.new(-476.48,-6.28,92.73) POS_L2=Vector3.new(-483.12,-4.95,94.80)
