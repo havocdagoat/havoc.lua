@@ -45,7 +45,7 @@ ProgressBarFill=nil ProgressLabel=nil ProgressPctLabel=nil RadiusInput=nil
 animalCache={} promptCache={} stealCache={}
 toggleStates={} mobileButtons={} mobBtnRefs={}
 AntiRagdollConns={}
-CONFIG_KEY="EclipseX_Duels_Config"
+CONFIG_KEY="lucidX_Duels_Config"
 changingKeybind=nil
 SavedToggleStates={}
 
@@ -81,7 +81,7 @@ Keybinds={
 KeybindButtons={}
 
 local aimbotHighlight=Instance.new("Highlight")
-aimbotHighlight.Name="EclipseAimbotESP"
+aimbotHighlight.Name="lucidAimbotESP"
 aimbotHighlight.FillColor=Color3.fromRGB(180,0,255)
 aimbotHighlight.OutlineColor=Color3.fromRGB(255,255,255)
 aimbotHighlight.FillTransparency=0.5 aimbotHighlight.OutlineTransparency=0
@@ -203,10 +203,10 @@ local function startTaunt()
             pcall(function()
                 local TCS=game:GetService("TextChatService")
                 local ch=TCS.TextChannels:FindFirstChild("RBXGeneral")
-                if ch then ch:SendAsync("/lol Eclipse Better 😂😂")
-                else game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents",1):WaitForChild("SayMessageRequest",1):FireServer("/lol Eclipse Better 😂😂","All") end
+                if ch then ch:SendAsync("/lol lucid Better 😂😂")
+                else game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents",1):WaitForChild("SayMessageRequest",1):FireServer("/lol lucid Better 😂😂","All") end
             end)
-            task.wait(0.5)
+            task.wait(0.2)
         end
     end)
 end
@@ -217,7 +217,7 @@ local function makeSpeedBB()
     local c=player.Character if not c then return end
     local head=c:FindFirstChild("Head") if not head then return end
     if speedBB then pcall(function() speedBB:Destroy() end) end
-    speedBB=Instance.new("BillboardGui") speedBB.Name="EclipseSpeedBB" speedBB.Adornee=head
+    speedBB=Instance.new("BillboardGui") speedBB.Name="lucidSpeedBB" speedBB.Adornee=head
     speedBB.Size=UDim2.new(0,130,0,30) speedBB.StudsOffset=Vector3.new(0,3.2,0)
     speedBB.AlwaysOnTop=true speedBB.Parent=head
     local lbl=Instance.new("TextLabel") lbl.Name="SpeedLbl" lbl.Size=UDim2.new(1,0,1,0)
@@ -410,12 +410,12 @@ local function createESP(plr)
     local c=plr.Character
     local root=c:FindFirstChild("HumanoidRootPart") if not root then return end
     local head=c:FindFirstChild("Head") if not head then return end
-    if c:FindFirstChild("EclipseESP") then return end
+    if c:FindFirstChild("lucidESP") then return end
     local box=Instance.new("BoxHandleAdornment")
-    box.Name="EclipseESP" box.Adornee=root box.Size=Vector3.new(4,6,2)
+    box.Name="lucidESP" box.Adornee=root box.Size=Vector3.new(4,6,2)
     box.Color3=ACCENT box.Transparency=0.45 box.ZIndex=10 box.AlwaysOnTop=true box.Parent=c
     local bb=Instance.new("BillboardGui")
-    bb.Name="EclipseESP_Name" bb.Adornee=head bb.Size=UDim2.new(0,200,0,45)
+    bb.Name="lucidESP_Name" bb.Adornee=head bb.Size=UDim2.new(0,200,0,45)
     bb.StudsOffset=Vector3.new(0,3,0) bb.AlwaysOnTop=true bb.Parent=c
     local lbl=Instance.new("TextLabel")
     lbl.Size=UDim2.new(1,0,1,0) lbl.BackgroundTransparency=1 lbl.Text=plr.DisplayName
@@ -424,7 +424,7 @@ local function createESP(plr)
 end
 local function removeESP(plr)
     if not plr.Character then return end
-    local b=plr.Character:FindFirstChild("EclipseESP") local n=plr.Character:FindFirstChild("EclipseESP_Name")
+    local b=plr.Character:FindFirstChild("lucidESP") local n=plr.Character:FindFirstChild("lucidESP_Name")
     if b then b:Destroy() end if n then n:Destroy() end
 end
 local function enableESP()
@@ -519,7 +519,7 @@ local function startSpin()
     local c=player.Character if not c then return end
     local root=c:FindFirstChild("HumanoidRootPart") if not root then return end
     if spinBAV then spinBAV:Destroy() end
-    spinBAV=Instance.new("BodyAngularVelocity") spinBAV.Name="EclipseSpinBAV"
+    spinBAV=Instance.new("BodyAngularVelocity") spinBAV.Name="lucidSpinBAV"
     spinBAV.MaxTorque=Vector3.new(0,math.huge,0) spinBAV.AngularVelocity=Vector3.new(0,SPIN_SPEED,0) spinBAV.Parent=root
 end
 local function stopSpin() if spinBAV then spinBAV:Destroy() spinBAV=nil end end
@@ -811,7 +811,7 @@ player.CharacterAdded:Connect(function(c) task.wait(0.5) setupChar(c) end)
 
 -- GUI
 local ScreenGui=Instance.new("ScreenGui")
-ScreenGui.Name="EclipseXDuels" ScreenGui.ResetOnSpawn=false
+ScreenGui.Name="lucidXDuels" ScreenGui.ResetOnSpawn=false
 ScreenGui.ZIndexBehavior=Enum.ZIndexBehavior.Sibling ScreenGui.IgnoreGuiInset=false
 ScreenGui.Parent=player:WaitForChild("PlayerGui")
 
@@ -837,7 +837,7 @@ local TitleFix=Instance.new("Frame",TitleBar)
 TitleFix.Size=UDim2.new(1,0,0,16) TitleFix.Position=UDim2.new(0,0,1,-16)
 TitleFix.BackgroundColor3=Color3.fromRGB(10,8,18) TitleFix.BorderSizePixel=0
 local TitleLbl=Instance.new("TextLabel",TitleBar)
-TitleLbl.Size=UDim2.new(1,0,1,0) TitleLbl.BackgroundTransparency=1 TitleLbl.Text="EclipseX Duels"
+TitleLbl.Size=UDim2.new(1,0,1,0) TitleLbl.BackgroundTransparency=1 TitleLbl.Text="lucidX Duels"
 TitleLbl.Font=Enum.Font.GothamBlack TitleLbl.TextSize=22 TitleLbl.TextColor3=WHITE
 TitleLbl.TextStrokeColor3=ACCENT TitleLbl.TextStrokeTransparency=0.5
 
@@ -1242,10 +1242,10 @@ end
 -- OPEN/CLOSE BUTTON
 do
     local OCGui=Instance.new("ScreenGui",player:WaitForChild("PlayerGui"))
-    OCGui.Name="EclipseXOpenClose" OCGui.ResetOnSpawn=false OCGui.ZIndexBehavior=Enum.ZIndexBehavior.Sibling
+    OCGui.Name="lucidXOpenClose" OCGui.ResetOnSpawn=false OCGui.ZIndexBehavior=Enum.ZIndexBehavior.Sibling
     local OBtn=Instance.new("TextButton",OCGui)
     OBtn.Size=UDim2.new(0,52,0,52) OBtn.Position=UDim2.new(0,10,0.5,-26)
-    OBtn.BackgroundColor3=Color3.fromRGB(10,8,18) OBtn.Text="💠" OBtn.TextSize=26
+    OBtn.BackgroundColor3=Color3.fromRGB(10,8,18) OBtn.Text="✝" OBtn.TextSize=26
     OBtn.Font=Enum.Font.GothamBold OBtn.TextColor3=WHITE OBtn.BorderSizePixel=0 OBtn.Active=true
     Instance.new("UICorner",OBtn).CornerRadius=UDim.new(0,14)
     local OS=Instance.new("UIStroke",OBtn) OS.Thickness=2 OS.Color=ACCENT OS.ApplyStrokeMode=Enum.ApplyStrokeMode.Border
@@ -1361,4 +1361,4 @@ end)
 
 if espEnabled then enableESP() end
 applyFOV()
-print("EclipseX Duels loaded — https://discord.gg/5FaWfEvmJ")
+print("lucidX Duels loaded — https://discord.gg/5FaWfEvmJ")
