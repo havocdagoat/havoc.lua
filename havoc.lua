@@ -822,7 +822,7 @@ MainFrame.BorderSizePixel=0 MainFrame.Active=true MainFrame.Visible=false MainFr
 Instance.new("UICorner",MainFrame).CornerRadius=UDim.new(0,16)
 
 local MainStroke=Instance.new("UIStroke",MainFrame)
-MainStroke.Thickness=2 MainStroke.Color=ACCENT MainStroke.ApplyStrokeMode=Enum.ApplyStrokeMode.Border
+MainStroke.Thickness=2 MainStroke.Color = Color3.fromHSV(tick()%5/5, 0.7, 1) MainStroke.ApplyStrokeMode=Enum.ApplyStrokeMode.Border
 task.spawn(function()
     while MainFrame and MainFrame.Parent do
         for i=0,20 do MainStroke.Thickness=2+i*0.05 task.wait(0.04) end
