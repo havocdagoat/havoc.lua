@@ -157,53 +157,87 @@ me.CharacterAdded:Connect(function()
 end)
 
 -- ── BAT ────────────────────────────────────
-local batCD = false
-local function getBat()
-    local c = me.Character; if not c then return end
-    for _,t in ipairs(c:GetChildren()) do
-        if t:IsA("Tool") and t.Name:lower():find("bat") then return t end
-    end
-    local bp = me:FindFirstChild("Backpack")
-    if bp then
-        for _,t in ipairs(bp:GetChildren()) do
-            if t:IsA("Tool") and t.Name:lower():find("bat") then t.Parent=c; return t end
+local function isTargetValid(targetChar)
+    if not targetChar then return false end
+    local hum=targetChar:FindFirstChildOfClass("Humanoid")
+    local hrp=targetChar:FindFirstChild("HumanoidRootPart")
+    local ff=targetChar:FindFirstChildOfClass("ForceField")
+    return hum and hrp and hum.Health>0 and not ff
+end
+local function getBestTarget(myHRP)
+    if lockedTarget and isTargetValid(lockedTarget) then return lockedTarget:FindFirstChild("HumanoidRootPart"),lockedTarget end
+    local shortestDist=math.huge local newTargetChar=nil local newTargetHRP=nil
+    for _,targetPlayer in ipairs(Players:GetPlayers()) do
+        if targetPlayer~=player and isTargetValid(targetPlayer.Character) then
+            local targetHRP=targetPlayer.Character:FindFirstChild("HumanoidRootPart")
+            local distance=(targetHRP.Position-myHRP.Position).Magnitude
+            if distance<shortestDist then shortestDist=distance newTargetHRP=targetHRP newTargetChar=targetPlayer.Character end
         end
     end
+    lockedTarget=newTargetChar return newTargetHRP,newTargetChar
 end
-local function hitBat()
-    if batCD then return end; batCD=true
-    local bat = getBat()
-    if bat then pcall(function() bat:Activate(); local e=bat:FindFirstChildWhichIsA("RemoteEvent"); if e then e:FireServer() end end) end
-    task.delay(0.08, function() batCD=false end)
+local function findBatTool()
+    local c=player.Character if not c then return nil end
+    local bp=player:FindFirstChildOfClass("Backpack")
+    local SlapList={"Bat","Slap","Iron Slap","Gold Slap","Diamond Slap","Emerald Slap","Ruby Slap","Dark Matter Slap","Flame Slap","Nuclear Slap","Galaxy Slap","Glitched Slap"}
+    for _,ch in ipairs(c:GetChildren()) do if ch:IsA("Tool") and ch.Name:lower():find("bat") then return ch end end
+    if bp then for _,ch in ipairs(bp:GetChildren()) do if ch:IsA("Tool") and ch.Name:lower():find("bat") then return ch end end end
+    for _,name in ipairs(SlapList) do local t=c:FindFirstChild(name) or (bp and bp:FindFirstChild(name)) if t then return t end end
 end
-local function closestEnemy()
-    local hrp = getHRP(); if not hrp then return nil,math.huge end
-    local best,bestD = nil,math.huge
-    for _,p in ipairs(Players:GetPlayers()) do
-        if p~=me and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
-            local d=(hrp.Position-p.Character.HumanoidRootPart.Position).Magnitude
-            if d<bestD then bestD=d; best=p end
-        end
-    end
-    return best,bestD
-end
-local function flyToFront(tHRP)
-    local hrp=getHRP(); if not hrp then return end
-    local front=tHRP.Position+tHRP.CFrame.LookVector*1.5
-    local dir=Vector3.new(front.X-hrp.Position.X,0,front.Z-hrp.Position.Z)
-    if dir.Magnitude<0.1 then return end
-    hrp.AssemblyLinearVelocity=Vector3.new(dir.Unit.X*56.5,hrp.AssemblyLinearVelocity.Y,dir.Unit.Z*56.5)
-end
-if not _G.K7BatLoop then _G.K7BatLoop=true
-    RunService.Heartbeat:Connect(function()
-        if not S.BatAimbot and not S.AutoSwing then return end
-        local hrp=getHRP(); if not hrp then return end
-        local target,dist=closestEnemy()
-        if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
-            if S.BatAimbot then flyToFront(target.Character.HumanoidRootPart) end
-            if S.AutoSwing and dist<=5 then hitBat() end
+local function startBatAimbot()
+    if aimbotConnection then return end
+    local c=player.Character if not c then return end
+    local h=c:FindFirstChild("HumanoidRootPart") local hum=c:FindFirstChildOfClass("Humanoid")
+    if not h or not hum then return end
+    hum.AutoRotate=false
+    local attachment=h:FindFirstChild("AimbotAttachment") or Instance.new("Attachment",h)
+    attachment.Name="AimbotAttachment"
+    local align=h:FindFirstChild("AimbotAlign") or Instance.new("AlignOrientation",h)
+    align.Name="AimbotAlign" align.Mode=Enum.OrientationAlignmentMode.OneAttachment
+    align.Attachment0=attachment align.MaxTorque=math.huge align.Responsiveness=200
+    batAimbotEnabled=true
+    aimbotConnection=RunService.Heartbeat:Connect(function()
+        if not batAimbotEnabled then return end
+        if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then return end
+        local currentHRP=player.Character.HumanoidRootPart
+        local currentHum=player.Character:FindFirstChildOfClass("Humanoid")
+        local bat=findBatTool()
+        if bat and bat.Parent~=player.Character then pcall(function() currentHum:EquipTool(bat) end) end
+        local targetHRP,targetChar=getBestTarget(currentHRP)
+        if targetHRP and targetChar then
+            aimbotHighlight.Adornee=targetChar
+            local targetVelocity=targetHRP.AssemblyLinearVelocity
+            local speed=targetVelocity.Magnitude
+            local dynamicPredictTime=math.clamp(speed/150,0.05,0.2)
+            local predictedPos=targetHRP.Position+(targetVelocity*dynamicPredictTime)
+            local dirToTarget=(predictedPos-currentHRP.Position)
+            local distance3D=dirToTarget.Magnitude
+            local targetStandPos=predictedPos
+            if distance3D>0 then targetStandPos=predictedPos-(dirToTarget.Unit*MELEE_OFFSET) end
+            align.CFrame=CFrame.lookAt(currentHRP.Position,predictedPos)
+            local moveDir=(targetStandPos-currentHRP.Position)
+            local distToStandPos=moveDir.Magnitude
+            if distToStandPos>1 then currentHRP.AssemblyLinearVelocity=moveDir.Unit*AIMBOT_SPEED
+            else currentHRP.AssemblyLinearVelocity=targetVelocity end
+            if distToStandPos<=BAT_ENGAGE_RANGE then
+                if bat and bat.Parent==player.Character then pcall(function() bat:Activate() end) end
+            end
+        else
+            lockedTarget=nil currentHRP.AssemblyLinearVelocity=Vector3.new(0,0,0) aimbotHighlight.Adornee=nil
         end
     end)
+end
+local function stopBatAimbot()
+    batAimbotEnabled=false
+    if aimbotConnection then aimbotConnection:Disconnect() aimbotConnection=nil end
+    local c=player.Character local h=c and c:FindFirstChild("HumanoidRootPart") local hum=c and c:FindFirstChildOfClass("Humanoid")
+    if h then
+        local att=h:FindFirstChild("AimbotAttachment") if att then att:Destroy() end
+        local al=h:FindFirstChild("AimbotAlign") if al then al:Destroy() end
+        h.AssemblyLinearVelocity=Vector3.new(0,0,0)
+    end
+    if hum then hum.AutoRotate=true end
+    lockedTarget=nil aimbotHighlight.Adornee=nil
 end
 
 -- ── DROP BRAINROT ──────────────────────────
