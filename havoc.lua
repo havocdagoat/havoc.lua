@@ -523,13 +523,24 @@ end)
 -- COLORS & HELPERS
 -- ══════════════════════════════════════════
 local C={
-    BG=Color3.new(0.0392157,0.0392157,0.0470588), TitleBG=Color3.new(0.0705882,0.0196078,0.0313726),
-    Accent=Color3.new(0.823529,0.117647,0.196078), AccText=Color3.new(1,0.235294,0.313726),
-    Panel=Color3.new(0.0862745,0.0862745,0.101961), PanelSt=Color3.new(0.235294,0.0392157,0.0627451),
-    SubText=Color3.new(0.470588,0.470588,0.509804), White=Color3.new(0.941176,0.941176,0.941176),
-    KeyBG=Color3.new(0.156863,0.0313726,0.0470588), GearBG=Color3.new(0.0784314,0.0784314,0.109804),
-    GearBlue=Color3.new(0.313726,0.705882,1), SW_Off=Color3.new(0.156863,0.156863,0.188235),
-    SW_Knob=Color3.new(0.470588,0.470588,0.509804),
+    BG=Color3.fromRGB(20,10,15), -- dark pinkish background
+    TitleBG=Color3.fromRGB(40,10,20),
+
+    Accent=Color3.fromRGB(255,120,80), -- orange-pink blend
+    AccText=Color3.fromRGB(255,160,120),
+
+    Panel=Color3.fromRGB(35,15,20),
+    PanelSt=Color3.fromRGB(255,120,100),
+
+    SubText=Color3.fromRGB(255,170,150),
+    White=Color3.fromRGB(255,240,235),
+
+    KeyBG=Color3.fromRGB(60,20,25),
+    GearBG=Color3.fromRGB(45,20,30),
+    GearBlue=Color3.fromRGB(255,140,100),
+
+    SW_Off=Color3.fromRGB(70,40,40),
+    SW_Knob=Color3.fromRGB(255,130,90),
 }
 local function mkC(p,r) local c=Instance.new("UICorner"); c.CornerRadius=UDim.new(0,r or 6); c.Parent=p end
 local function mkS(p,col,th,tr) local s=Instance.new("UIStroke"); s.Color=col or C.Accent; s.Thickness=th or 1.5; s.Transparency=tr or 0.4; s.Parent=p end
