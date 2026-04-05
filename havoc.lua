@@ -1,5 +1,5 @@
 --[[
-    K7 Mini Hub - Complete final version
+    lucid Mini Hub - Complete final version
     - Progress bar attached below main panel
     - Drop button integrated
     - Working waypoint offsets (negative allowed)
@@ -545,7 +545,7 @@ local Main=Instance.new("Frame"); Main.Name="K7Main"; Main.Size=UDim2.new(0,225,
 
 -- Title bar
 local TBar=Instance.new("Frame"); TBar.Size=UDim2.new(1,0,0,36); TBar.BackgroundColor3=C.TitleBG; TBar.BorderSizePixel=0; TBar.ZIndex=202; TBar.Parent=Main
-local TLbl=Instance.new("TextLabel"); TLbl.Size=UDim2.new(1,-44,1,0); TLbl.Position=UDim2.new(0,12,0,0); TLbl.BackgroundTransparency=1; TLbl.Text="K7 HUB"; TLbl.TextColor3=C.AccText; TLbl.TextSize=15; TLbl.Font=Enum.Font.GothamBold; TLbl.TextXAlignment=Enum.TextXAlignment.Left; TLbl.ZIndex=203; TLbl.Parent=TBar
+local TLbl=Instance.new("TextLabel"); TLbl.Size=UDim2.new(1,-44,1,0); TLbl.Position=UDim2.new(0,12,0,0); TLbl.BackgroundTransparency=1; TLbl.Text="lucid HUB"; TLbl.TextColor3=C.AccText; TLbl.TextSize=15; TLbl.Font=Enum.Font.GothamBold; TLbl.TextXAlignment=Enum.TextXAlignment.Left; TLbl.ZIndex=203; TLbl.Parent=TBar
 local SepLine=Instance.new("Frame"); SepLine.Size=UDim2.new(1,0,0,2); SepLine.Position=UDim2.new(0,0,0,36); SepLine.BackgroundColor3=C.Accent; SepLine.BackgroundTransparency=0.4; SepLine.BorderSizePixel=0; SepLine.ZIndex=202; SepLine.Parent=Main
 local XBtn=Instance.new("TextButton"); XBtn.Size=UDim2.new(0,26,0,26); XBtn.Position=UDim2.new(1,-32,0.5,-13); XBtn.BackgroundColor3=C.Accent; XBtn.BorderSizePixel=0; XBtn.Text="X"; XBtn.TextColor3=C.White; XBtn.Font=Enum.Font.GothamBold; XBtn.TextSize=13; XBtn.ZIndex=204; XBtn.Parent=TBar; mkC(XBtn,5)
 
