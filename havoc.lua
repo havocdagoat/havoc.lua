@@ -132,7 +132,7 @@ local function buildGUI()
 	TitleLabel.Size = UDim2.new(1, -50, 1, 0)
 	TitleLabel.Position = UDim2.new(0, 10, 0, 0)
 	TitleLabel.BackgroundTransparency = 1
-	TitleLabel.Text = "CURSED HUB"
+	TitleLabel.Text = "angelic HUB"
 	TitleLabel.TextColor3 = CONFIG.Colors.Accent
 	TitleLabel.Font = Enum.Font.GothamBlack
 	TitleLabel.TextSize = 14
@@ -389,7 +389,7 @@ end
 local function init()
 	buildGUI()
 	handleFunctionality()
-	print('Cursed Hub Loaded')
+	print('angelic Hub Loaded')
 end
 
 init()
