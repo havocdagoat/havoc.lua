@@ -90,7 +90,8 @@ end
 local function createStroke(parent, color, thickness)
 	local stroke = Instance.new("UIStroke")
 	stroke.Color = color or CONFIG.Colors.Accent
-	stroke.Thickness = thickness or 1
+	stroke.Thickness = thickness or 1.5
+	stroke.Transparency = 0.2
 	stroke.Parent = parent
 	return stroke
 end
