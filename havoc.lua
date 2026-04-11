@@ -13,7 +13,7 @@ local LocalPlayer = Players.LocalPlayer
 -- // [2] CONFIGURATION (EDITABLE) //
 local CONFIG = {
 	Gui = {
-		Name = "CursedHub",
+		Name = "AngelicHub",
 		DisplayOrder = 10,
 		IgnoreGuiInset = true,
 		ResetOnSpawn = false,
