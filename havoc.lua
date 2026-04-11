@@ -6,7 +6,7 @@ local Workspace = game:GetService("Workspace")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
-local CoreGui = game:GetService("CoreGui")
+local CoreGui = game:GetService("CoreGuiColors")
 
 local LocalPlayer = Players.LocalPlayer
 
@@ -20,14 +20,14 @@ local CONFIG = {
 	},
 
 	Colors = {
-	MainBackground = Color3.fromRGB(25, 15, 5),        -- dark warm background
-	TitleBar = Color3.fromRGB(40, 20, 5),              -- deeper orange header
-	SectionBackground = Color3.fromRGB(55, 30, 10),    -- warm section panels
-	
-	Accent = Color3.fromRGB(255, 170, 0),              -- bright orange-yellow (main glow)
-	
-	Text = Color3.fromRGB(255, 230, 150),              -- soft yellow text
-	SecondaryText = Color3.fromRGB(200, 140, 60),      -- muted orange text
+	MainBackground = Color3.fromRGB(245, 245, 255),   -- soft white
+	TitleBar = Color3.fromRGB(255, 255, 255),         -- pure white
+	SectionBackground = Color3.fromRGB(235, 235, 245),-- light panel
+
+	Accent = Color3.fromRGB(255, 215, 120),           -- gold glow
+
+	Text = Color3.fromRGB(60, 60, 80),                -- soft dark text
+	SecondaryText = Color3.fromRGB(140, 140, 170),    -- faded text
 },
 
 	Defaults = {
