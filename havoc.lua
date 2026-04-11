@@ -120,7 +120,7 @@ local function buildGUI()
 	MainFrame.Active = true
 	MainFrame.Draggable = true
 	MainFrame.Parent = ScreenGui
-	createCorner(MainFrame, 12)
+	createCorner(MainFrame, 18)
 
 	TitleBar = Instance.new("Frame")
 	TitleBar.Size = UDim2.new(1, 0, 0, 44)
