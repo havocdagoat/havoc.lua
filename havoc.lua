@@ -617,7 +617,7 @@ local function startAutoLeft()
                 autoLeftPhase = 1
                 
                 if _G.AutoLeftToggleBg and _G.AutoLeftToggleCircle then
-                    _G.AutoLeftToggleBg.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+                    _G.AutoLefttoggleBg.BackgroundColor3 = defaultOn and C.accentLight or C.bg
                     _G.AutoLeftToggleCircle.Position = UDim2.new(0, 2, 0.5, -6)
                 end
                 
