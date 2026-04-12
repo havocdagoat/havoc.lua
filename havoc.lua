@@ -938,7 +938,7 @@ mainCorner.Parent = main
 -- Glass effect
 local glassEffect = Instance.new("Frame")
 glassEffect.Size = UDim2.new(1, 0, 1, 0)
-glassEffect.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+glassEffect.BackgroundColor3 = Color3.fromRGB(255, 255, 255) glassEffect.BackgroundTransparency = 0.85
 glassEffect.BackgroundTransparency = 0.9
 glassEffect.BorderSizePixel = 0
 glassEffect.Parent = main
