@@ -45,7 +45,7 @@ local isStealing = false
 local stealStartTime = nil
 local Values = {
     STEAL_RADIUS = 20,
-    STEAL_DURATION = 1.3,
+    STEAL_DURATION = 0.25,
     DEFAULT_GRAVITY = 196.2,
     GalaxyGravityPercent = 70,
     HOP_POWER = 35,
@@ -899,18 +899,20 @@ loadConfig()
 
 -- ===== ALL BLACK UI SETUP =====
 local C = {
-    bg = Color3.fromRGB(0, 0, 0),
-    glass = Color3.fromRGB(10, 10, 10),
-    accent = Color3.fromRGB(30, 30, 30),
-    accentLight = Color3.fromRGB(50, 50, 50),
-    accentDark = Color3.fromRGB(15, 15, 15),
-    text = Color3.fromRGB(200, 200, 200),
-    textDim = Color3.fromRGB(120, 120, 120),
-    success = Color3.fromRGB(40, 40, 40),
-    danger = Color3.fromRGB(35, 35, 35),
-    warning = Color3.fromRGB(45, 45, 45)
+    bg = Color3.fromRGB(255, 255, 255),          -- main background (white)
+    glass = Color3.fromRGB(255, 255, 255),       -- panels (soft white)
+    
+    accent = Color3.fromRGB(212, 175, 55),       -- gold
+    accentLight = Color3.fromRGB(255, 215, 120), -- light gold glow
+    accentDark = Color3.fromRGB(170, 135, 40),   -- darker gold
+    
+    text = Color3.fromRGB(40, 40, 40),           -- dark text (so it’s readable)
+    textDim = Color3.fromRGB(120, 120, 120),     -- dim gray text
+    
+    success = Color3.fromRGB(212, 175, 55),      -- gold for buttons
+    danger = Color3.fromRGB(200, 80, 80),        -- soft red (optional)
+    warning = Color3.fromRGB(255, 200, 100)      -- warm gold/orange
 }
-
 local gui = Instance.new("ScreenGui")
 gui.Name = "AngelicDuelsGUI"
 gui.ResetOnSpawn = false
