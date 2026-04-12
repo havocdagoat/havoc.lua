@@ -912,7 +912,7 @@ local C = {
 }
 
 local gui = Instance.new("ScreenGui")
-gui.Name = "NovaDuelsGUI"
+gui.Name = "AngelicDuelsGUI"
 gui.ResetOnSpawn = false
 gui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 
@@ -1045,7 +1045,7 @@ logoGradient.Parent = logo
 local logoText = Instance.new("TextLabel")
 logoText.Size = UDim2.new(1, 0, 1, 0)
 logoText.BackgroundTransparency = 1
-logoText.Text = "N"
+logoText.Text = "A"
 logoText.TextColor3 = C.text
 logoText.Font = Enum.Font.GothamBlack
 logoText.TextSize = 14
@@ -1056,7 +1056,7 @@ local title = Instance.new("TextLabel")
 title.Size = UDim2.new(0, 140, 0, 30)
 title.Position = UDim2.new(0, 42, 0, 7)
 title.BackgroundTransparency = 1
-title.Text = "NOVA DUELS"
+title.Text = "ANGELIC DUELS"
 title.TextColor3 = C.text
 title.Font = Enum.Font.GothamBlack
 title.TextSize = 14
