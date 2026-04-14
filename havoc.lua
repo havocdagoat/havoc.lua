@@ -647,8 +647,8 @@ local C_ROW_HOV=Color3.fromRGB(240,240,240)    -- hover (light gray)
 local C_BORDER=Color3.fromRGB(212,175,55)      -- gold border
 local C_HEADER=Color3.fromRGB(255,255,255)     -- header white
 local C_ACCENT2=Color3.fromRGB(212,175,55)     -- gold accent
-local C_DIM=Color3.fromRGB(150,150,150)        -- dim text
-local C_WHITE=Color3.fromRGB(255,255,255)
+local C_DIM=Color3.fromRGB(80,80,80)        -- dim text
+local C_WHITE=Color3.fromRGB(25,25,25) -- dark text
 local C_ON_BG=Color3.fromRGB(212,175,55)       -- toggle ON = gold
 local C_OFF_BG=Color3.fromRGB(220,220,220)     -- toggle OFF = light gray
 local C_RED_ACC=Color3.fromRGB(212,175,55)     -- replace red with gold
