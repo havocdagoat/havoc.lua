@@ -693,7 +693,7 @@ local C_RED_ACC=Color3.fromRGB(212,175,55)     -- replace red with gold
 	hDiv.Size=UDim2.new(1,0,0,1);hDiv.Position=UDim2.new(0,0,1,-1);hDiv.BackgroundColor3=C_BORDER;hDiv.BorderSizePixel=0;hDiv.ZIndex=6
 	local titleLbl = Instance.new("TextLabel",header)
 	titleLbl.Size=UDim2.new(0,220,1,0);titleLbl.Position=UDim2.new(0,14,0,0);titleLbl.BackgroundTransparency=1
-	titleLbl.Text="CURSED HUB";titleLbl.TextColor3=C_RED_ACC;titleLbl.Font=Enum.Font.GothamBlack;titleLbl.TextSize=15
+	titleLbl.Text="RELIC HUB";titleLbl.TextColor3=C_RED_ACC;titleLbl.Font=Enum.Font.GothamBlack;titleLbl.TextSize=15
 	titleLbl.TextXAlignment=Enum.TextXAlignment.Left;titleLbl.ZIndex=6
 	local closeBtn = Instance.new("TextButton",header)
 	closeBtn.Size=UDim2.new(0,26,0,26);closeBtn.Position=UDim2.new(1,-34,0.5,-13);closeBtn.BackgroundTransparency=1
@@ -1170,7 +1170,7 @@ local C_RED_ACC=Color3.fromRGB(212,175,55)     -- replace red with gold
 	miniToggleBtn.Position=UDim2.new(0,38,0,38)
 	miniToggleBtn.BackgroundColor3=Color3.fromRGB(8,8,8)
 	miniToggleBtn.BorderSizePixel=0
-	miniToggleBtn.Text="CURSED HUB"
+	miniToggleBtn.Text="RELIC HUB"
 	miniToggleBtn.TextColor3=Color3.fromRGB(180,20,40)
 	miniToggleBtn.Font=Enum.Font.GothamBlack
 	miniToggleBtn.TextSize=11
@@ -1295,4 +1295,4 @@ end
 preloadKeybinds()
 buildGui()
 loadConfig()
-print("Cursed Hub Loaded")
+print("RELIC HUB Loaded")
