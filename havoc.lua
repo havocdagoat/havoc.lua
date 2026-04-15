@@ -287,7 +287,7 @@ local function setupSpeedIndicator(char)
 	bb.Size=UDim2.new(0,140,0,25);bb.StudsOffset=Vector3.new(0,3,0);bb.AlwaysOnTop=true
 	speedLabel = Instance.new("TextLabel",bb)
 	speedLabel.Size=UDim2.new(1,0,1,0);speedLabel.BackgroundTransparency=1
-	speedLabel.Text="Speed: 0";speedLabel.TextColor3 = Color3.fromRGB(212,175,55)
+	speedLabel.Text="Speed: 0";speedLabel.TextColor3 = Color3.fromRGB(138,43,226)
 	speedLabel.Font=Enum.Font.GothamBold;speedLabel.TextScaled=true
 	speedLabel.TextStrokeTransparency=0;speedLabel.TextStrokeColor3=Color3.fromRGB(0,0,0)
 end
