@@ -641,17 +641,21 @@ local durationInput,normalBox,carryBox,radInput
 local floatHeightBox
 
 local function buildGui()
-	local C_BG=Color3.fromRGB(245,245,245)         -- main background (white)
-local C_ROW=Color3.fromRGB(255,255,255)        -- rows (pure white)
-local C_ROW_HOV=Color3.fromRGB(240,240,240)    -- hover (light gray)
-local C_BORDER=Color3.fromRGB(212,175,55)      -- gold border
-local C_HEADER=Color3.fromRGB(255,255,255)     -- header white
-local C_ACCENT2=Color3.fromRGB(212,175,55)     -- gold accent
-local C_DIM=Color3.fromRGB(80,80,80)        -- dim text
-local C_WHITE=Color3.fromRGB(25,25,25) -- dark text
-local C_ON_BG=Color3.fromRGB(212,175,55)       -- toggle ON = gold
-local C_OFF_BG=Color3.fromRGB(220,220,220)     -- toggle OFF = light gray
-local C_RED_ACC=Color3.fromRGB(212,175,55)     -- replace red with gold
+local C_BG = Color3.fromRGB(245,245,255)        -- soft indigo-white background
+local C_ROW = Color3.fromRGB(235,235,255)       -- light indigo panels
+local C_ROW_HOV = Color3.fromRGB(220,220,255)   -- hover
+local C_BORDER = Color3.fromRGB(75,0,130)       -- indigo border
+local C_HEADER = Color3.fromRGB(235,235,255)    -- header
+
+local C_ACCENT2 = Color3.fromRGB(75,0,130)      -- indigo accent
+local C_DIM = Color3.fromRGB(110,110,140)
+
+local C_WHITE = Color3.fromRGB(25,25,25)        -- text (dark for readability)
+
+local C_ON_BG = Color3.fromRGB(75,0,130)        -- TOGGLE ON (indigo)
+local C_OFF_BG = Color3.fromRGB(200,200,230)    -- TOGGLE OFF (light indigo)
+
+local C_RED_ACC = Color3.fromRGB(75,0,130)      -- replace red with indigo
     
 	local old = game:GetService("CoreGui"):FindFirstChild("XanaxHub");if old then old:Destroy() end
 	local pg = LP:FindFirstChild("PlayerGui");if pg then local o2=pg:FindFirstChild("XanaxHub");if o2 then o2:Destroy() end end
