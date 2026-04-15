@@ -623,7 +623,7 @@ RunService.Heartbeat:Connect(function()
 end)
 
 -- ===== GUI =====
-local C_BG=Color3.fromRGB(25,25,30)
+local C_BG=Color3.fromRGB(255,255,255)
 local C_CARD=Color3.fromRGB(40,40,50)
 local C_PURPLE=Color3.fromRGB(147,112,219)
 local C_WHITE=Color3.fromRGB(255,255,255)
@@ -631,7 +631,7 @@ local C_RED=Color3.fromRGB(220,60,85)
 local C_GREEN=Color3.fromRGB(60,180,80)
 
 local gui=Instance.new("ScreenGui")
-gui.Name="K7MiniHub"; gui.ResetOnSpawn=false; gui.DisplayOrder=10
+gui.Name="RelicHub"; gui.ResetOnSpawn=false; gui.DisplayOrder=10
 gui.Parent=LP:WaitForChild("PlayerGui")
 
 local main=Instance.new("Frame"); main.Size=UDim2.new(0,200,0,500)
