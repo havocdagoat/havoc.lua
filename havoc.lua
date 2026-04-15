@@ -630,7 +630,7 @@ local function saveConfig()
 		stretchRez=stretchRezEnabled,
 		tpMode=tpMode,
 	}
-	if writefile then pcall(function() writefile("RelicHubPC.json",HS:JSONEncode(cfg)) end) end
+	if writefile then pcall(function() writefile("XanaxHubPC.json",HS:JSONEncode(cfg)) end) end
 end
 task.spawn(function() while task.wait(5) do saveConfig() end end)
 
@@ -653,11 +653,11 @@ local C_ON_BG=Color3.fromRGB(212,175,55)       -- toggle ON = gold
 local C_OFF_BG=Color3.fromRGB(220,220,220)     -- toggle OFF = light gray
 local C_RED_ACC=Color3.fromRGB(212,175,55)     -- replace red with gold
     
-	local old = game:GetService("CoreGui"):FindFirstChild("RelicHub");if old then old:Destroy() end
-	local pg = LP:FindFirstChild("PlayerGui");if pg then local o2=pg:FindFirstChild("RelicHub");if o2 then o2:Destroy() end end
+	local old = game:GetService("CoreGui"):FindFirstChild("XanaxHub");if old then old:Destroy() end
+	local pg = LP:FindFirstChild("PlayerGui");if pg then local o2=pg:FindFirstChild("XanaxHub");if o2 then o2:Destroy() end end
 
 	local gui = Instance.new("ScreenGui")
-	gui.Name="RelicHub";gui.ResetOnSpawn=false;gui.DisplayOrder=10;gui.IgnoreGuiInset=true
+	gui.Name="XanaxHub";gui.ResetOnSpawn=false;gui.DisplayOrder=10;gui.IgnoreGuiInset=true
 	pcall(function() if syn and syn.protect_gui then syn.protect_gui(gui) end end)
 	if not pcall(function() gui.Parent=game:GetService("CoreGui") end) then gui.Parent=LP:WaitForChild("PlayerGui") end
 
@@ -693,7 +693,7 @@ local C_RED_ACC=Color3.fromRGB(212,175,55)     -- replace red with gold
 	hDiv.Size=UDim2.new(1,0,0,1);hDiv.Position=UDim2.new(0,0,1,-1);hDiv.BackgroundColor3=C_BORDER;hDiv.BorderSizePixel=0;hDiv.ZIndex=6
 	local titleLbl = Instance.new("TextLabel",header)
 	titleLbl.Size=UDim2.new(0,220,1,0);titleLbl.Position=UDim2.new(0,14,0,0);titleLbl.BackgroundTransparency=1
-	titleLbl.Text="RELIC HUB";titleLbl.TextColor3=C_RED_ACC;titleLbl.Font=Enum.Font.GothamBlack;titleLbl.TextSize=15
+	titleLbl.Text="Xanax Hub";titleLbl.TextColor3=C_RED_ACC;titleLbl.Font=Enum.Font.GothamBlack;titleLbl.TextSize=15
 	titleLbl.TextXAlignment=Enum.TextXAlignment.Left;titleLbl.ZIndex=6
 	local closeBtn = Instance.new("TextButton",header)
 	closeBtn.Size=UDim2.new(0,26,0,26);closeBtn.Position=UDim2.new(1,-34,0.5,-13);closeBtn.BackgroundTransparency=1
@@ -1170,7 +1170,7 @@ local C_RED_ACC=Color3.fromRGB(212,175,55)     -- replace red with gold
 	miniToggleBtn.Position=UDim2.new(0,38,0,38)
 	miniToggleBtn.BackgroundColor3 = Color3.fromRGB(212,175,55)
 	miniToggleBtn.BorderSizePixel=0
-	miniToggleBtn.Text="RELIC HUB"
+	miniToggleBtn.Text="Xanax Hub"
 	miniToggleBtn.TextColor3 = Color3.fromRGB(255,255,255) -- white text
 	miniToggleBtn.Font=Enum.Font.GothamBlack
 	miniToggleBtn.TextSize=11
@@ -1232,8 +1232,8 @@ local C_RED_ACC=Color3.fromRGB(212,175,55)     -- replace red with gold
 end
 
 local function loadConfig()
-	if not(isfile and isfile("RelicHubPC.json")) then return end
-	local ok,cfg=pcall(function() return HS:JSONDecode(readfile("RelicHubPC.json")) end)
+	if not(isfile and isfile("XanaxHubPC.json")) then return end
+	local ok,cfg=pcall(function() return HS:JSONDecode(readfile("XanaxHubPC.json")) end)
 	if not ok or not cfg then return end
 	local function lk(entryName,data)
 		local entry=KB[entryName];if not data then return end
@@ -1271,8 +1271,8 @@ local function loadConfig()
 end
 
 local function preloadKeybinds()
-	if not(isfile and isfile("RelicHubPC.json")) then return end
-	local ok,cfg=pcall(function() return HS:JSONDecode(readfile("RelicHubPC.json")) end)
+	if not(isfile and isfile("XanaxHubPC.json")) then return end
+	local ok,cfg=pcall(function() return HS:JSONDecode(readfile("XanaxHubPC.json")) end)
 	if not ok or not cfg then return end
 	local function lk(entryName,data)
 		local entry=KB[entryName];if not data then return end
@@ -1295,4 +1295,4 @@ end
 preloadKeybinds()
 buildGui()
 loadConfig()
-print("RELIC HUB Loaded")
+print("Xanax Hub Loaded")
