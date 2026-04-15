@@ -289,7 +289,7 @@ local function setupSpeedIndicator(char)
 	speedLabel.Size=UDim2.new(1,0,1,0);speedLabel.BackgroundTransparency=1
 	speedLabel.Text="Speed: 0";speedLabel.TextColor3 = Color3.fromRGB(138,43,226)
 	speedLabel.Font=Enum.Font.GothamBold;speedLabel.TextScaled=true
-	speedLabel.TextStrokeTransparency=0;speedLabel.TextStrokeColor3=Color3.fromRGB(0,0,0)
+	speedLabel.TextStrokeTransparency=0;speedLabel.TextStrokeColor3 = Color3.fromRGB(255,255,255)
 end
 
 local function startAntiRagdoll()
