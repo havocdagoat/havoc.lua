@@ -727,46 +727,54 @@ local function buildGui()
 
 	-- === SIDEBAR ===
 	local sidebar=Instance.new("Frame",body)
-	sidebar.Size=UDim2.new(0,150,1,0); sidebar.BackgroundColor3=C_SIDEBAR; sidebar.BorderSizePixel=0
+	sidebar.Size=UDim2.new(0,150,1,0); sidebar.BackgroundColor3=C_SIDEBAR; sidebar.BorderSizePixel=0; sidebar.ClipsDescendants=true
 	local sideDiv=Instance.new("Frame",sidebar)
-	sideDiv.Size=UDim2.new(0,1,1,0); sideDiv.Position=UDim2.new(1,-1,0,0); sideDiv.BackgroundColor3=C_BORDER; sideDiv.BorderSizePixel=0
+	sideDiv.Size=UDim2.new(0,1,1,0); sideDiv.Position=UDim2.new(1,-1,0,0); sideDiv.BackgroundColor3=C_BORDER; sideDiv.BorderSizePixel=0; sideDiv.ZIndex=10
 
-	-- R Logo area
-	local logoFrame=Instance.new("Frame",sidebar)
-	logoFrame.Size=UDim2.new(1,0,0,185); logoFrame.BackgroundTransparency=1; logoFrame.BorderSizePixel=0; logoFrame.ClipsDescendants=true
+	-- Nav box at the TOP of sidebar (ZIndex high so it sits above R)
+	local navBox=Instance.new("Frame",sidebar)
+	navBox.Size=UDim2.new(1,-16,0,0); navBox.Position=UDim2.new(0,8,0,10)
+	navBox.BackgroundColor3=Color3.fromRGB(16,16,16); navBox.BorderSizePixel=0; navBox.AutomaticSize=Enum.AutomaticSize.Y
+	navBox.ZIndex=8; navBox.ClipsDescendants=false
+	Instance.new("UICorner",navBox).CornerRadius=UDim.new(0,10)
+	local navBoxStroke=Instance.new("UIStroke",navBox)
+	navBoxStroke.Color=Color3.fromRGB(50,50,50); navBoxStroke.Thickness=1
 
-	local bigR=Instance.new("TextLabel",logoFrame)
-	bigR.Size=UDim2.new(1,10,0,185); bigR.Position=UDim2.new(0,-5,0,-10)
+	local navFrame=Instance.new("Frame",navBox)
+	navFrame.Size=UDim2.new(1,0,0,0); navFrame.AutomaticSize=Enum.AutomaticSize.Y
+	navFrame.BackgroundTransparency=1; navFrame.BorderSizePixel=0; navFrame.ZIndex=8
+	local navLL=Instance.new("UIListLayout",navFrame)
+	navLL.SortOrder=Enum.SortOrder.LayoutOrder; navLL.Padding=UDim.new(0,2)
+	local navPad=Instance.new("UIPadding",navFrame)
+	navPad.PaddingLeft=UDim.new(0,5); navPad.PaddingRight=UDim.new(0,5); navPad.PaddingTop=UDim.new(0,5); navPad.PaddingBottom=UDim.new(0,5)
+
+	-- R fills lower portion of sidebar, positioned below nav buttons
+	local bigR=Instance.new("TextLabel",sidebar)
+	bigR.Size=UDim2.new(1,0,1,-220); bigR.Position=UDim2.new(0,0,0,220)
 	bigR.BackgroundTransparency=1; bigR.Text="R"; bigR.TextColor3=Color3.fromRGB(255,255,255)
-	bigR.TextTransparency=0.82; bigR.Font=Enum.Font.GothamBlack; bigR.TextSize=160
+	bigR.TextTransparency=0.80; bigR.Font=Enum.Font.GothamBlack; bigR.TextSize=200
 	bigR.TextScaled=true; bigR.TextXAlignment=Enum.TextXAlignment.Center; bigR.TextYAlignment=Enum.TextYAlignment.Center
+	bigR.ZIndex=2
 
-	local logoGrad=Instance.new("Frame",logoFrame)
-	logoGrad.Size=UDim2.new(1,0,0,70); logoGrad.Position=UDim2.new(0,0,1,-70)
-	logoGrad.BackgroundColor3=C_SIDEBAR; logoGrad.BorderSizePixel=0
-	local logoGradGrad=Instance.new("UIGradient",logoGrad)
-	logoGradGrad.Rotation=90; logoGradGrad.Transparency=NumberSequence.new({NumberSequenceKeypoint.new(0,1),NumberSequenceKeypoint.new(1,0)})
+	-- Fade gradient over top of R so it blends with nav box area
+	local rFade=Instance.new("Frame",sidebar)
+	rFade.Size=UDim2.new(1,0,0,60); rFade.Position=UDim2.new(0,0,0,210)
+	rFade.BackgroundColor3=C_SIDEBAR; rFade.BorderSizePixel=0; rFade.ZIndex=3
+	local rFadeGrad=Instance.new("UIGradient",rFade)
+	rFadeGrad.Rotation=90; rFadeGrad.Transparency=NumberSequence.new({NumberSequenceKeypoint.new(0,0),NumberSequenceKeypoint.new(1,1)})
 
-	local logoBottomName=Instance.new("TextLabel",logoFrame)
+	-- Bottom name overlay
+	local logoBottomName=Instance.new("TextLabel",sidebar)
 	logoBottomName.Size=UDim2.new(1,-10,0,18); logoBottomName.Position=UDim2.new(0,10,1,-38)
 	logoBottomName.BackgroundTransparency=1; logoBottomName.Text="RELIC HUB"
 	logoBottomName.TextColor3=C_WHITE; logoBottomName.Font=Enum.Font.GothamBlack; logoBottomName.TextSize=12
-	logoBottomName.TextXAlignment=Enum.TextXAlignment.Left; logoBottomName.ZIndex=2
+	logoBottomName.TextXAlignment=Enum.TextXAlignment.Left; logoBottomName.ZIndex=5
 
-	local logoBottomSub=Instance.new("TextLabel",logoFrame)
+	local logoBottomSub=Instance.new("TextLabel",sidebar)
 	logoBottomSub.Size=UDim2.new(1,-10,0,14); logoBottomSub.Position=UDim2.new(0,10,1,-20)
 	logoBottomSub.BackgroundTransparency=1; logoBottomSub.Text="discord.gg/relichub"
 	logoBottomSub.TextColor3=C_DIM; logoBottomSub.Font=Enum.Font.GothamBlack; logoBottomSub.TextSize=9
-	logoBottomSub.TextXAlignment=Enum.TextXAlignment.Left; logoBottomSub.ZIndex=2
-
-	-- Nav buttons
-	local navFrame=Instance.new("Frame",sidebar)
-	navFrame.Size=UDim2.new(1,0,1,-185); navFrame.Position=UDim2.new(0,0,0,185)
-	navFrame.BackgroundTransparency=1; navFrame.BorderSizePixel=0
-	local navLL=Instance.new("UIListLayout",navFrame)
-	navLL.SortOrder=Enum.SortOrder.LayoutOrder; navLL.Padding=UDim.new(0,3)
-	local navPad=Instance.new("UIPadding",navFrame)
-	navPad.PaddingLeft=UDim.new(0,6); navPad.PaddingRight=UDim.new(0,6); navPad.PaddingTop=UDim.new(0,6)
+	logoBottomSub.TextXAlignment=Enum.TextXAlignment.Left; logoBottomSub.ZIndex=5
 
 	-- === CONTENT AREA ===
 	local contentArea=Instance.new("Frame",body)
@@ -794,7 +802,7 @@ local function buildGui()
 		for n,d in pairs(navBtns) do
 			local active=(n==name)
 			TS:Create(d.btn,TweenInfo.new(0.15),{TextColor3=active and C_WHITE or C_DIM}):Play()
-			TS:Create(d.bg,TweenInfo.new(0.15),{BackgroundTransparency=active and 0 or 1,BackgroundColor3=Color3.fromRGB(26,26,26)}):Play()
+			TS:Create(d.bg,TweenInfo.new(0.15),{BackgroundTransparency=active and 0 or 1,BackgroundColor3=Color3.fromRGB(30,30,30)}):Play()
 			local existingStroke=d.bg:FindFirstChildOfClass("UIStroke")
 			if active and not existingStroke then
 				local st=Instance.new("UIStroke",d.bg); st.Color=Color3.fromRGB(55,55,55); st.Thickness=0.8
@@ -814,16 +822,15 @@ local function buildGui()
 		btn.Size=UDim2.new(1,0,0,34); btn.BorderSizePixel=0; btn.LayoutOrder=i
 		btn.Text=name; btn.TextColor3=name=="Speed" and C_WHITE or C_DIM
 		btn.Font=Enum.Font.GothamBlack; btn.TextSize=12; btn.AutoButtonColor=false
-		btn.TextXAlignment=Enum.TextXAlignment.Center; btn.BackgroundTransparency=1
+		btn.TextXAlignment=Enum.TextXAlignment.Center; btn.BackgroundTransparency=1; btn.ZIndex=10
 		local bg=Instance.new("Frame",btn)
-		bg.Size=UDim2.new(1,0,1,0); bg.BorderSizePixel=0; bg.ZIndex=0
-		bg.BackgroundColor3=Color3.fromRGB(26,26,26)
+		bg.Size=UDim2.new(1,0,1,0); bg.BorderSizePixel=0; bg.ZIndex=9
+		bg.BackgroundColor3=Color3.fromRGB(30,30,30)
 		bg.BackgroundTransparency=name=="Speed" and 0 or 1
-		Instance.new("UICorner",bg).CornerRadius=UDim.new(0,8)
+		Instance.new("UICorner",bg).CornerRadius=UDim.new(0,7)
 		if name=="Speed" then
-			local st=Instance.new("UIStroke",bg); st.Color=Color3.fromRGB(55,55,55); st.Thickness=0.8
+			local st=Instance.new("UIStroke",bg); st.Color=Color3.fromRGB(60,60,60); st.Thickness=0.8
 		end
-		btn.ZIndex=2
 		navBtns[name]={btn=btn,bg=bg}
 		btn.MouseEnter:Connect(function()
 			if activeTabName~=name then TS:Create(bg,TweenInfo.new(0.1),{BackgroundTransparency=0.6,BackgroundColor3=Color3.fromRGB(26,26,26)}):Play() end
