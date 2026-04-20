@@ -643,16 +643,16 @@ local floatHeightBox
 -- buildGui written below
 local function buildGui()
 	local C_BG        = Color3.fromRGB(10,10,10)
-    local C_SIDEBAR   = Color3.fromRGB(6,6,6)
-    local C_TOPBAR    = Color3.fromRGB(8,8,8)
-    local C_ROW       = Color3.fromRGB(18,18,18)
-    local C_ROW_HOV   = Color3.fromRGB(24,24,24)
+	local C_SIDEBAR   = Color3.fromRGB(8,8,8)
+	local C_TOPBAR    = Color3.fromRGB(6,6,6)
+	local C_ROW       = Color3.fromRGB(20,20,20)
+	local C_ROW_HOV   = Color3.fromRGB(28,28,28)
 	local C_BORDER    = Color3.fromRGB(38,38,38)
 	local C_DIM       = Color3.fromRGB(80,80,80)
 	local C_WHITE     = Color3.fromRGB(255,255,255)
 	local C_SUBTEXT   = Color3.fromRGB(120,120,120)
-	local C_ON_BG = Color3.fromRGB(60,60,60)
-local C_OFF_BG = Color3.fromRGB(20,20,20)
+	local C_ON_BG     = Color3.fromRGB(80,80,80)
+	local C_OFF_BG    = Color3.fromRGB(35,35,35)
 	local C_INPUT_BG  = Color3.fromRGB(28,28,28)
 	local C_KEY_BG    = Color3.fromRGB(30,30,30)
 
@@ -667,7 +667,7 @@ local C_OFF_BG = Color3.fromRGB(20,20,20)
 
 	-- === MAIN FRAME ===
 	local main = Instance.new("Frame", gui)
-	main.Name="Main"; main.Size = UDim2.new(0,600,0,420); main.Position=UDim2.new(0.5,-260,0.5,-230)
+	main.Name="Main"; main.Size=UDim2.new(0,520,0,460); main.Position=UDim2.new(0.5,-260,0.5,-230)
 	main.BackgroundColor3=C_BG; main.BorderSizePixel=0; main.Active=true; main.ClipsDescendants=true
 	Instance.new("UICorner",main).CornerRadius=UDim.new(0,12)
 	local mainStroke=Instance.new("UIStroke",main); mainStroke.Color=C_BORDER; mainStroke.Thickness=1
@@ -706,7 +706,7 @@ local C_OFF_BG = Color3.fromRGB(20,20,20)
 
 	local discordLbl=Instance.new("TextLabel",topbar)
 	discordLbl.Size=UDim2.new(0,160,1,0); discordLbl.Position=UDim2.new(0,108,0,0); discordLbl.BackgroundTransparency=1
-	discordLbl.Text="discord.gg/relichub"; discordLbl.TextColor3=C_DIM; discordLbl.Font=Enum.Font.GothamBlack; discordLbl.TextSize=10
+	discordLbl.Text="https://discord.gg/Jatr4EFUez"; discordLbl.TextColor3=C_DIM; discordLbl.Font=Enum.Font.GothamBlack; discordLbl.TextSize=10
 	discordLbl.TextXAlignment=Enum.TextXAlignment.Left; discordLbl.ZIndex=6
 
 	local miniToggleBtn
@@ -727,7 +727,7 @@ local C_OFF_BG = Color3.fromRGB(20,20,20)
 
 	-- === SIDEBAR ===
 	local sidebar=Instance.new("Frame",body)
-	sidebar.Size = UDim2.new(0,170,1,0); sidebar.BackgroundColor3=C_SIDEBAR; sidebar.BorderSizePixel=0; sidebar.ClipsDescendants=true
+	sidebar.Size=UDim2.new(0,150,1,0); sidebar.BackgroundColor3=C_SIDEBAR; sidebar.BorderSizePixel=0; sidebar.ClipsDescendants=true
 	local sideDiv=Instance.new("Frame",sidebar)
 	sideDiv.Size=UDim2.new(0,1,1,0); sideDiv.Position=UDim2.new(1,-1,0,0); sideDiv.BackgroundColor3=C_BORDER; sideDiv.BorderSizePixel=0; sideDiv.ZIndex=10
 
@@ -750,9 +750,9 @@ local C_OFF_BG = Color3.fromRGB(20,20,20)
 
 	-- R fills lower portion of sidebar, positioned below nav buttons
 	local bigR=Instance.new("TextLabel",sidebar)
-	bigR.Size = UDim2.new(1,0,1,-160); bigR.Position = UDim2.new(0,0,0,160)
+	bigR.Size=UDim2.new(1,0,1,-220); bigR.Position=UDim2.new(0,0,0,220)
 	bigR.BackgroundTransparency=1; bigR.Text="R"; bigR.TextColor3=Color3.fromRGB(255,255,255)
-	bigR.TextTransparency=0.85; bigR.Font=Enum.Font.GothamBlack; bigR.TextSize=200
+	bigR.TextTransparency=0.80; bigR.Font=Enum.Font.GothamBlack; bigR.TextSize=200
 	bigR.TextScaled=true; bigR.TextXAlignment=Enum.TextXAlignment.Center; bigR.TextYAlignment=Enum.TextYAlignment.Center
 	bigR.ZIndex=2
 
@@ -772,14 +772,13 @@ local C_OFF_BG = Color3.fromRGB(20,20,20)
 
 	local logoBottomSub=Instance.new("TextLabel",sidebar)
 	logoBottomSub.Size=UDim2.new(1,-10,0,14); logoBottomSub.Position=UDim2.new(0,10,1,-20)
-	logoBottomSub.BackgroundTransparency=1; logoBottomSub.Text="discord.gg/relichub"
+	logoBottomSub.BackgroundTransparency=1; logoBottomSub.Text="https://discord.gg/Jatr4EFUez"
 	logoBottomSub.TextColor3=C_DIM; logoBottomSub.Font=Enum.Font.GothamBlack; logoBottomSub.TextSize=9
 	logoBottomSub.TextXAlignment=Enum.TextXAlignment.Left; logoBottomSub.ZIndex=5
 
 	-- === CONTENT AREA ===
 	local contentArea=Instance.new("Frame",body)
-	contentArea.Size = UDim2.new(1,-170,1,0)
-contentArea.Position = UDim2.new(0,170,0,0)
+	contentArea.Size=UDim2.new(1,-150,1,0); contentArea.Position=UDim2.new(0,150,0,0)
 	contentArea.BackgroundTransparency=1; contentArea.BorderSizePixel=0; contentArea.ClipsDescendants=true
 
 	-- === TAB SYSTEM ===
@@ -793,8 +792,7 @@ contentArea.Position = UDim2.new(0,170,0,0)
 		sf.AutomaticCanvasSize=Enum.AutomaticSize.Y; sf.CanvasSize=UDim2.new(0,0,0,0); sf.Visible=false
 		local ll=Instance.new("UIListLayout",sf); ll.SortOrder=Enum.SortOrder.LayoutOrder; ll.Padding=UDim.new(0,4)
 		local pp=Instance.new("UIPadding",sf)
-		pp.PaddingLeft = UDim.new(0,16)
-pp.PaddingRight = UDim.new(0,16); pp.PaddingTop=UDim.new(0,10); pp.PaddingBottom=UDim.new(0,10)
+		pp.PaddingLeft=UDim.new(0,12); pp.PaddingRight=UDim.new(0,12); pp.PaddingTop=UDim.new(0,10); pp.PaddingBottom=UDim.new(0,10)
 		tabPages[name]=sf
 	end
 
@@ -821,9 +819,9 @@ pp.PaddingRight = UDim.new(0,16); pp.PaddingTop=UDim.new(0,10); pp.PaddingBottom
 	-- create nav buttons
 	for i,name in ipairs(TAB_NAMES) do
 		local btn=Instance.new("TextButton",navFrame)
-		btn.Size = UDim2.new(1,0,0,30); btn.BorderSizePixel=0; btn.LayoutOrder=i
+		btn.Size=UDim2.new(1,0,0,34); btn.BorderSizePixel=0; btn.LayoutOrder=i
 		btn.Text=name; btn.TextColor3=name=="Speed" and C_WHITE or C_DIM
-		btn.Font=Enum.Font.GothamBlack; btn.TextSize=11; btn.AutoButtonColor=false
+		btn.Font=Enum.Font.GothamBlack; btn.TextSize=12; btn.AutoButtonColor=false
 		btn.TextXAlignment=Enum.TextXAlignment.Center; btn.BackgroundTransparency=1; btn.ZIndex=10
 		local bg=Instance.new("Frame",btn)
 		bg.Size=UDim2.new(1,0,1,0); bg.BorderSizePixel=0; bg.ZIndex=9
@@ -850,8 +848,8 @@ pp.PaddingRight = UDim.new(0,16); pp.PaddingTop=UDim.new(0,10); pp.PaddingBottom
 		local acc=Instance.new("Frame",row); acc.Size=UDim2.new(0,3,0,11); acc.Position=UDim2.new(0,0,0.5,-5)
 		acc.BackgroundColor3=C_WHITE; acc.BorderSizePixel=0; Instance.new("UICorner",acc).CornerRadius=UDim.new(0,2)
 		local lbl=Instance.new("TextLabel",row); lbl.Size=UDim2.new(1,-8,1,0); lbl.Position=UDim2.new(0,8,0,0)
-		lbl.BackgroundTransparency=1; lbl.Text=text:upper(); lbl.TextColor3 = Color3.fromRGB(150,150,150)
-		lbl.Font=Enum.Font.GothamBlack; lbl.TextSize=10; lbl.TextXAlignment=Enum.TextXAlignment.Left
+		lbl.BackgroundTransparency=1; lbl.Text=text:upper(); lbl.TextColor3=C_SUBTEXT
+		lbl.Font=Enum.Font.GothamBlack; lbl.TextSize=9; lbl.TextXAlignment=Enum.TextXAlignment.Left
 	end
 
 	local function mkRow(pg)
@@ -909,7 +907,7 @@ pp.PaddingRight = UDim.new(0,16); pp.PaddingTop=UDim.new(0,10); pp.PaddingBottom
 		Instance.new("UICorner",pillBg).CornerRadius=UDim.new(1,0)
 		local dot=Instance.new("Frame",pillBg); dot.Size=UDim2.new(0,14,0,14)
 		dot.Position=defOn and UDim2.new(1,-17,0.5,-7) or UDim2.new(0,3,0.5,-7)
-		dot.BackgroundColor3 = defOn and Color3.fromRGB(255,255,255); dot.BorderSizePixel=0; dot.ZIndex=6
+		dot.BackgroundColor3=defOn and C_WHITE or Color3.fromRGB(90,90,90); dot.BorderSizePixel=0; dot.ZIndex=6
 		Instance.new("UICorner",dot).CornerRadius=UDim.new(1,0)
 		local isOn=defOn or false
 		local function setV(on)
@@ -1254,7 +1252,7 @@ pp.PaddingRight = UDim.new(0,16); pp.PaddingTop=UDim.new(0,10); pp.PaddingBottom
 	progressRadLbl=Instance.new("TextLabel",pbFrame)
 	progressRadLbl.Size=UDim2.new(0,110,0,18); progressRadLbl.Position=UDim2.new(1,-118,0,6)
 	progressRadLbl.BackgroundTransparency=1; progressRadLbl.Text="Radius: "..Steal.StealRadius
-	progressRadLbl.TextColor3=C_SUBTEXT; progressRadLbl.Font=Enum.Font.GothamBlack; progressRadLbl.TextSize=9; progressRadLbl.TextXAlignment=Enum.TextXAlignment.Right
+	progressRadLbl.TextColor3=C_SUBTEXT; progressRadLbl.Font=Enum.Font.GothamBlack; progressRadLbl.TextSize=13; progressRadLbl.TextXAlignment=Enum.TextXAlignment.Right
 	local progressBg=Instance.new("Frame",pbFrame)
 	progressBg.Size=UDim2.new(1,-20,0,14); progressBg.Position=UDim2.new(0,10,0,30)
 	progressBg.BackgroundColor3=Color3.fromRGB(22,22,22); progressBg.BorderSizePixel=0
