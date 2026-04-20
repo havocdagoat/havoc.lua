@@ -667,7 +667,7 @@ local function buildGui()
 
 	-- === MAIN FRAME ===
 	local main = Instance.new("Frame", gui)
-	main.Name="Main"; main.Size=UDim2.new(0,520,0,460); main.Position=UDim2.new(0.5,-260,0.5,-230)
+	main.Name="Main"; main.Size = UDim2.new(0,600,0,420); main.Position=UDim2.new(0.5,-260,0.5,-230)
 	main.BackgroundColor3=C_BG; main.BorderSizePixel=0; main.Active=true; main.ClipsDescendants=true
 	Instance.new("UICorner",main).CornerRadius=UDim.new(0,12)
 	local mainStroke=Instance.new("UIStroke",main); mainStroke.Color=C_BORDER; mainStroke.Thickness=1
